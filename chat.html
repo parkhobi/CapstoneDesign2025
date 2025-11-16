@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅 - HMH</title>
+    <script src="common.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="resume-layout">
+        <div id="sidebar-left-placeholder"></div>
+
+        <main class="chat-content"> 
+            <header class="chat-header">
+                <div class="chat-header-title">
+                    <span class="doc-icon icon-gdoc">📘</span> <strong>미래 대기업 입사와 직무 고민</strong>
+                </div>
+                <div class="chat-header-actions">
+                    <button class="btn-stop">멈추기</button>
+                    <a href="index.html" class="btn-exit">나가기</a> </div>
+            </header>
+
+            <div class="chat-history-area" id="chat-history">
+                </div>
+
+            <footer class="chat-input-area">
+                <button class="btn-icon"><i class="fas fa-plus"></i></button>
+                <textarea id="chat-prompt" placeholder="메시지를 입력하세요..."></textarea>
+                <button class="btn-icon"><i class="fas fa-microphone"></i></button>
+                <button class="btn-icon"><i class="fas fa-image"></i></button>
+                <button class="btn-icon" id="chat-submit"><i class="fas fa-search"></i></button>
+            </footer>
+
+        </main>
+
+        <div id="sidebar-right-placeholder"></div>
+
+    </div> 
+    
+    <script src="common.js"></script>
+    <script src="chat.js"></script>
+</body>
+</html>

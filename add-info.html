@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>추가 정보 입력 - HMH</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="body-center-form-scroll">
+    <div class="signup-container">
+        <h1>추가 정보 입력</h1>
+        <p class="signup-description">
+            회원가입이 완료되었습니다! 🎉<br>
+            정확한 진로 상담을 위해 이력서 정보를 입력해 주세요.
+        </p>
+        
+        <form action="signup-success.html">
+            <h2>기본 정보</h2>
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" placeholder="이름 입력" required>
+            </div>
+            
+            <div class="input-row">
+                <div class="input-group half-width">
+                    <label for="gender">성별</label>
+                    <input type="text" id="gender" placeholder="성별 선택">
+                </div>
+                <div class="input-group half-width">
+                    <label for="birthdate">출생 연도</label>
+                    <input type="text" id="birthdate" placeholder="출생 연도 입력">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">전화번호 (선택)</label>
+                <input type="tel" id="phone" placeholder="전화번호 입력">
+            </div>
+
+            <h2>학력 정보</h2>
+            <div class="input-group">
+                <label for="school">학교</label>
+                <input type="text" id="school" placeholder="학교 선택">
+            </div>
+            <div class="input-group">
+                <label for="major">전공</label>
+                <input type="text" id="major" placeholder="전공 선택">
+            </div>
+            
+            <div class="input-row">
+                <div class="input-group half-width">
+                    <label for="admission-year">입학 연도</label>
+                    <input type="text" id="admission-year" placeholder="입학 연도 선택">
+                </div>
+                <div class="input-group half-width">
+                    <label for="graduation-year">졸업 연도</label>
+                    <input type="text" id="graduation-year" placeholder="졸업 연도 선택">
+                </div>
+            </div>
+
+            <button type="submit" class="signup-button">완료</button>
+        </form>
+    </div>
+    <script src="add-info.js"></script>
+</body>
+</html>
