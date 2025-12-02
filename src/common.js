@@ -11,7 +11,7 @@
         window.location.href = 'login.html';
     } else if (token && isProtectedPage) {
         // 토큰이 있으면, 공통 레이아웃 로드 *전에* 사용자 정보부터 가져옴
-        //fetchAndDisplayUserInfo(token);  ########### API호출 백 연결 시 주석처리 지우기 #################
+        fetchAndDisplayUserInfo(token);
     }
 })();
 

@@ -1,9 +1,7 @@
-// HTML 문서가 로드된 후 실행
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. 폼 요소들 미리 찾아놓기
     const profileForm = document.getElementById('profile-form');
-    // (입력창이 많으므로 id로 하나씩 가져옵니다)
+    // 입력창 요소들 가져오기
     const nameInput = document.getElementById('name');
     const genderInput = document.getElementById('gender');
     const birthdateInput = document.getElementById('birthdate');
@@ -13,51 +11,89 @@ document.addEventListener('DOMContentLoaded', () => {
     const admissionYearInput = document.getElementById('admission-year');
     const graduationYearInput = document.getElementById('graduation-year');
     
-    // --- (A) 페이지 로드 시: 저장된 데이터 불러오기 ---
-    
-    // 1. localStorage에서 'userProfile' 데이터 가져오기
-    const savedProfile = localStorage.getItem('userProfile');
-
-    if (savedProfile) {
-        // 2. JSON 문자열을 다시 객체로 변환
-        const profileData = JSON.parse(savedProfile);
-        
-        // 3. 폼 입력창에 기존 데이터 채워넣기
-        nameInput.value = profileData.name || '';
-        genderInput.value = profileData.gender || '';
-        birthdateInput.value = profileData.birthdate || '';
-        phoneInput.value = profileData.phone || '';
-        schoolInput.value = profileData.school || '';
-        majorInput.value = profileData.major || '';
-        admissionYearInput.value = profileData.admissionYear || '';
-        graduationYearInput.value = profileData.graduationYear || '';
+    // 1. 토큰 확인
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        alert('로그인이 필요합니다.');
+        window.location.href = 'login.html';
+        return;
     }
 
-    // --- (B) '저장하기' 버튼 클릭 시: 새 데이터 저장하기 ---
-    
-    profileForm.addEventListener('submit', (event) => {
-        // 1. 폼의 기본 제출(새로고침) 동작 막기
+    // 백엔드 API 주소 (조회와 수정 주소가 같을 수도, 다를 수도 있음)
+    const API_ENDPOINT = 'http://localhost:8000/api/v1/profile';
+
+
+    // --- [기능 1] 페이지 로드 시: 내 정보 불러오기 (GET) ---
+    async function loadProfile() {
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // 토큰 필수
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                
+                // 받아온 데이터로 입력창 채우기
+                // (백엔드에서 오는 데이터 필드명 확인 필요: data.name, data.gender 등)
+                nameInput.value = data.name || '';
+                genderInput.value = data.gender || '';
+                birthdateInput.value = data.birthdate || '';
+                phoneInput.value = data.phone || '';
+                schoolInput.value = data.school || '';
+                majorInput.value = data.major || '';
+                admissionYearInput.value = data.admission_year || ''; 
+                graduationYearInput.value = data.graduation_year || '';
+            } else {
+                console.error('프로필 불러오기 실패');
+            }
+        } catch (error) {
+            console.error('프로필 로드 통신 오류:', error);
+        }
+    }
+
+    // 페이지 열리자마자 실행
+    loadProfile();
+
+
+    // --- [기능 2] 저장 버튼 클릭 시: 수정된 정보 보내기 (PUT) ---
+    profileForm.addEventListener('submit', async (event) => {
         event.preventDefault(); 
         
-        // 2. 폼에서 현재 입력된 값들로 새 객체 만들기
-        const updatedProfile = {
+        const updatedData = {
             name: nameInput.value,
             gender: genderInput.value,
             birthdate: birthdateInput.value,
             phone: phoneInput.value,
             school: schoolInput.value,
             major: majorInput.value,
-            admissionYear: admissionYearInput.value,
-            graduationYear: graduationYearInput.value
+            admission_year: admissionYearInput.value,
+            graduation_year: graduationYearInput.value
         };
 
-        // 3. 새 객체를 JSON 문자열로 변환하여 localStorage에 덮어쓰기
-        localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'PUT', // 수정은 보통 PUT 또는 PATCH
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData)
+            });
 
-        // 4. 사용자에게 저장 완료 알림
-        alert('정보가 성공적으로 저장되었습니다!');
-        
-        // (선택) 저장 후 메인 페이지로 이동
-        window.location.href = 'index.html'; 
+            if (response.ok) {
+                alert('정보가 성공적으로 수정되었습니다!');
+                // (선택) 수정 후 메인으로 이동하려면 주석 해제
+                // window.location.href = 'index.html';
+            } else {
+                const data = await response.json();
+                alert(data.error || '정보 수정에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('프로필 수정 통신 오류:', error);
+            alert('서버와 통신 중 오류가 발생했습니다.');
+        }
     });
 });

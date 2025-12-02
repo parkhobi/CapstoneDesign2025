@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const passwordConfirmInput = document.getElementById('password-confirm');
+    const emailInput = document.getElementById('email'); // 이메일 추가
     
     // 에러 메시지를 표시할 <p> 태그들
     const usernameError = document.getElementById('username-error');
@@ -44,18 +45,49 @@ document.addEventListener('DOMContentLoaded', () => {
             isValid = false;
         }
         
-        // 4. 모든 검사를 통과했는지 확인
-        if (isValid) {
-            // [백엔드 연동]
-            // 모든 검사를 통과했다면, 이곳에서 fetch를 사용해
-            // 백엔드(Django)의 '/api/v1/register' 같은 API로
-            // 아이디, 비밀번호를 전송(POST)하여 회원가입을 요청합니다.
-            
-            // [프론트엔드 테스트용]
-            // 지금은 백엔드가 없으므로, 
-            // 성공했다고 가정하고 다음 페이지로 강제 이동시킵니다.
-            alert('회원가입 성공! (테스트)');
-            window.location.href = 'add-info.html'; // 다음 페이지로 이동
+        // 유효성 검사를 통과하지 못했으면 여기서 중단
+        if (!isValid) return;
+
+        // 3. [백엔드 연결] 회원가입 요청 보내기
+        // 백엔드 개발자에게 받은 실제 회원가입 API 주소를 넣으세요.
+        const API_ENDPOINT = '/api/v1/login'; 
+
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // 백엔드가 원하는 데이터 필드명(키값)에 맞춰서 보내야 합니다.
+                body: JSON.stringify({
+                    username: usernameInput.value,
+                    password: passwordInput.value,
+                    email: emailInput.value // 선택 사항
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // [성공 시]
+                // 회원가입 성공 후 '추가 정보 입력' 페이지로 이동
+                alert('회원가입이 완료되었습니다.'); // 필요시 alert 제거 가능
+                window.location.href = 'add-info.html'; 
+            } else {
+                // [실패 시] 백엔드에서 보낸 에러 메시지 표시
+                // 예: "이미 존재하는 아이디입니다."
+                if (data.field === 'username') {
+                    usernameError.textContent = data.error;
+                } else if (data.field === 'password') {
+                    passwordError.textContent = data.error;
+                } else {
+                    // 필드가 특정되지 않은 에러는 alert 등으로 표시하거나 공통 에러칸에 표시
+                    alert(data.error || '회원가입에 실패했습니다.');
+                }
+            }
+        } catch (error) {
+            console.error('회원가입 요청 오류:', error);
+            alert('서버와 통신 중 오류가 발생했습니다.');
         }
     });
 });
