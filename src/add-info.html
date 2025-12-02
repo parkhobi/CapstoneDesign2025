@@ -16,46 +16,41 @@
         
         <form action="signup-success.html">
             <h2>기본 정보</h2>
-            <div class="input-group">
-                <label for="name">이름</label>
-                <input type="text" id="name" placeholder="이름 입력" required>
+            <div class="input-row">
+                <div class="input-group half-width">
+                    <label for="name-ko">이름 (한글)</label>
+                    <input type="text" id="name-ko" placeholder="홍길동" required>
+                </div>
+                <div class="input-group half-width">
+                    <label for="name-en">영문 이름</label>
+                    <input type="text" id="name-en" placeholder="Gildong Hong" required>
+                </div>
             </div>
             
             <div class="input-row">
                 <div class="input-group half-width">
                     <label for="gender">성별</label>
-                    <input type="text" id="gender" placeholder="성별 선택">
+                    <input type="text" id="gender" placeholder="남/여" required>
                 </div>
                 <div class="input-group half-width">
-                    <label for="birthdate">출생 연도</label>
-                    <input type="text" id="birthdate" placeholder="출생 연도 입력">
+                    <label for="nationality">국적</label>
+                    <input type="text" id="nationality" placeholder="대한민국" required>
                 </div>
             </div>
 
             <div class="input-group">
-                <label for="phone">전화번호 (선택)</label>
-                <input type="tel" id="phone" placeholder="전화번호 입력">
+                <label for="address">주소</label>
+                <input type="text" id="address" placeholder="시/구/동 번지수 등 상세주소 입력" required>
             </div>
 
-            <h2>학력 정보</h2>
+            <h2>연락처</h2>
             <div class="input-group">
-                <label for="school">학교</label>
-                <input type="text" id="school" placeholder="학교 선택">
+                <label for="email">이메일</label>
+                <input type="email" id="email" placeholder="example@email.com" required>
             </div>
             <div class="input-group">
-                <label for="major">전공</label>
-                <input type="text" id="major" placeholder="전공 선택">
-            </div>
-            
-            <div class="input-row">
-                <div class="input-group half-width">
-                    <label for="admission-year">입학 연도</label>
-                    <input type="text" id="admission-year" placeholder="입학 연도 선택">
-                </div>
-                <div class="input-group half-width">
-                    <label for="graduation-year">졸업 연도</label>
-                    <input type="text" id="graduation-year" placeholder="졸업 연도 선택">
-                </div>
+                <label for="phone">전화번호</label>
+                <input type="tel" id="phone" placeholder="010-1234-5678" required>
             </div>
 
             <button type="submit" class="signup-button">완료</button>

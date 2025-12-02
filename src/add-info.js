@@ -17,14 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. 입력된 값들로 데이터 객체 만들기
         // (주의: 백엔드가 원하는 필드명(key)과 일치해야 함)
         const profileData = {
-            name: document.getElementById('name').value,
+            name_ko: document.getElementById('name-ko').value,
+            name_en: document.getElementById('name-en').value,
             gender: document.getElementById('gender').value,
-            birthdate: document.getElementById('birthdate').value,
-            phone: document.getElementById('phone').value,
-            school: document.getElementById('school').value,
-            major: document.getElementById('major').value,
-            admissionYear: document.getElementById('admission-year').value,
-            graduationYear: document.getElementById('graduation-year').value
+            nationality: document.getElementById('nationality').value,
+            address: document.getElementById('address').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value
         };
         
         // 3. [백엔드 연결] 프로필 저장 API 요청

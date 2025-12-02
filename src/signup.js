@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const passwordConfirmInput = document.getElementById('password-confirm');
-    const emailInput = document.getElementById('email'); // 이메일 추가
     
     // 에러 메시지를 표시할 <p> 태그들
     const usernameError = document.getElementById('username-error');
@@ -62,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                     username: usernameInput.value,
                     password: passwordInput.value,
-                    email: emailInput.value // 선택 사항
                 }),
             });
 
