@@ -1,0 +1,1209 @@
+/* style.css */
+body.body-center-form {
+    display: flex; /* Flexbox 사용 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    min-height: 100vh; /* 화면 전체 높이를 최소 높이로 설정 */
+    background-color: #F8F9FB; /* Figma에서 확인한 페이지 배경색 */
+    margin: 0; /* body의 기본 마진 제거 */
+    font-family: Arial, sans-serif; /* 폰트 설정 (선택 사항) */
+}
+
+/* style.css에 추가 */
+body.body-center-form-scroll {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 맨 위부터 시작하도록 변경 */
+    min-height: 100vh;
+    background-color: #f0f2f5; 
+    margin: 0;
+}
+
+/* --- 새로운 컨테이너 스타일링 --- */
+.container {
+    display: flex; /* 로고 섹션과 로그인 박스를 Flexbox로 나란히 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 80px; /* 로고 섹션과 로그인 박스 사이의 간격 (Figma에서 확인) */
+    /* 필요하다면 max-width를 설정하여 전체 너비를 제한할 수도 있습니다. */
+    /* max-width: 1000px; */ 
+    /* padding: 0 20px; */ /* 좌우 패딩 (선택 사항) */
+}
+
+/* --- 로고와 환영 문구 섹션 스타일링 --- */
+.intro-section {
+    text-align: center; /* 로고와 텍스트를 중앙 정렬 */
+}
+
+.intro-section .logo {
+    /* Figma에서 확인한 로고 크기 */
+    width: 200px; /* 예시 값, Figma에서 정확한 너비를 확인하세요 */
+    margin-bottom: 15px; /* 로고와 '안녕하세요!' 사이 간격 */
+}
+
+.intro-section .greeting {
+    font-size: 28px; /* Figma에서 확인한 폰트 크기 */
+    color: #00C78B; /* Figma에서 확인한 색상 (녹색 계열) */
+    font-weight: bold; /* 필요하다면 굵게 */
+}
+
+
+/* --- 기존 로그인 박스 스타일 --- */
+.login-box {
+    width: 360px; /* Figma에서 확인한 로그인 박스 너비 */
+    padding: 30px; /* Figma에서 확인한 내부 여백 */
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* 필요하다면 Figma에서 확인한 그림자 값으로 더 정확하게 조정 */
+}
+
+.login-box h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #00C78B; /* Figma 버튼의 녹색에 맞춰 수정 */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #169b73; /* 호버 시 색상 약간 어둡게 */
+}
+
+/* --- 로그인 박스 하단 링크 --- */
+.links-container {
+    text-align: center; /* 링크들을 가운데 정렬 */
+    margin-top: 20px; /* 로그인 버튼과의 간격 */
+}
+
+.links-container a {
+    font-size: 14px;
+    color: #555; /* 링크 색상 (디자인에 맞게 조절) */
+    text-decoration: none; /* 밑줄 제거 */
+    margin: 0 10px; /* 링크 좌우 여백 */
+}
+
+.links-container a:hover {
+    text-decoration: underline; /* 마우스 올리면 밑줄 표시 */
+}
+
+.links-container .divider {
+    color: #ccc; /* 구분선 색상 */
+}
+
+
+
+/* --- 1단계: 회원가입 페이지 (signup.html) --- */
+/* 로그인 박스(.login-box)와 거의 비슷하지만 너비만 조금 다릅니다. */
+.signup-box {
+    width: 400px; /* 로그인 박스(360px)보다 조금 넓게 */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* body의 flex 덕분에 중앙 정렬됩니다 */
+}
+
+.signup-box h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 25px; /* 제목과 폼 사이 간격 */
+}
+
+
+/* --- 2단계: 추가정보 페이지 (add-info.html) --- */
+/* 폼이 길기 때문에 더 넓고, 페이지 상하 여백도 줍니다. */
+.signup-container {
+    width: 500px; 
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 40px 0; /* 페이지가 길어질 수 있으니 상하 여백 추가 */
+}
+
+.signup-container h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+/* "회원가입 완료!" 설명 텍스트 */
+.signup-description {
+    text-align: center;
+    font-size: 15px;
+    color: #777;
+    margin-bottom: 30px;
+    line-height: 1.5; /* 줄 간격 */
+}
+
+/* "기본 정보", "학력 정보" 같은 섹션 제목 */
+.signup-container h2 {
+    font-size: 18px;
+    color: #333;
+    border-bottom: 2px solid #00C78B; /* HMH 테마 색상 밑줄 */
+    padding-bottom: 8px;
+    margin-top: 30px; /* 섹션 간 여백 */
+    margin-bottom: 20px;
+}
+
+/* "성별/출생연도" 같이 가로로 2개 배치 */
+.input-row {
+    display: flex;
+    gap: 20px; /* 두 항목 사이 간격 */
+}
+
+.input-row .half-width {
+    flex: 1; /* 1:1 비율로 너비 차지 */
+}
+
+/* --- 공통 스타일 (버튼, 링크 등) --- */
+/* .input-group, .signup-button, .login-link 스타일은 
+   이전에 만든 것을 그대로 재활용합니다. 
+   (이미 있다면 추가할 필요 X) 
+*/
+
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #00C78B;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px; /* 폼 마지막 항목과 버튼 사이 간격 */
+}
+
+.signup-button:hover {
+    background-color: #169b73;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.login-link a {
+    color: #0375f0; /* 링크 색상을 HMH 테마에 맞게 */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+
+
+/* --- 가입 완료 페이지 (signup-success.html) --- */
+
+/* 'page-success' 클래스가 있는 body에만 적용되는 스타일입니다.
+  다른 페이지의 body 스타일(중앙 정렬)을 덮어씁니다.
+*/
+body.page-success {
+    /* 이미지에서 본 청록색 배경 */
+    background-color: #00C78B; 
+    
+    /* 내용을 페이지 정중앙에 배치 */
+    display: flex;
+    flex-direction: column; /* 세로로 쌓기 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    
+    height: 100vh; /* 화면 전체 높이 */
+    margin: 0; /* body 기본 마진 제거 */
+    font-family: Arial, sans-serif;
+}
+
+/* "가입 성공!" 텍스트 */
+body.page-success h1 {
+    color: white; /* 흰색 글자 */
+    font-size: 32px; 
+    font-weight: bold;
+    margin-bottom: 30px; /* 버튼과의 간격 */
+}
+
+/* "내 서류 보러 가기" 버튼 */
+.success-button {
+    background-color: white; /* 흰색 배경 */
+    /* 글자색은 배경색보다 조금 더 진한 녹색 계열 */
+    color: #009688; 
+    
+    /* 이미지처럼 좌우로 길고 둥글게 */
+    padding: 14px 40px; 
+    border-radius: 50px; 
+    
+    text-decoration: none; /* 링크 밑줄 제거 */
+    font-size: 16px;
+    font-weight: bold;
+    
+    /* 부드러운 전환 효과 */
+    transition: transform 0.2s ease-in-out; 
+}
+
+/* 버튼에 마우스 올렸을 때 살짝 커지는 효과 */
+.success-button:hover {
+    transform: scale(1.05); 
+}
+
+
+
+/* --- 메인 페이지 (index.html) --- */
+
+/* 메인 페이지의 body는 특별한 스타일이 필요 없습니다.
+  기본 폰트와 배경색만 설정합니다.
+*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #ffffff; /* 메인 콘텐츠 배경색 */
+}
+
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =============================
+  1. 사이드바 스타일
+  =============================
+*/
+.sidebar {
+    width: 260px; /* 사이드바 너비 */
+    background-color: #f7f9fa; /* 사이드바 배경색 */
+    border-right: 1px solid #e0e0e0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+}
+
+.sidebar-logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00C78B; /* HMH 로고 색상 */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.nav-button {
+    text-decoration: none;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #00C78B;
+    border-radius: 20px; /* 둥근 버튼 */
+    padding: 10px 15px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.nav-button.active,
+.nav-button:hover {
+    background-color: #00C78B;
+    color: white;
+}
+
+.sidebar-section {
+    margin-bottom: 30px;
+}
+
+.sidebar-section h3 {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.module-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: border-color 0.2s;
+}
+
+.module-card:hover {
+    border-color: #00C78B;
+}
+
+.module-card span {
+    font-size: 20px;
+}
+
+/* =============================
+  2. 메인 콘텐츠 스타일
+  =============================
+*/
+.main-content {
+    flex: 1; /* 나머지 공간 모두 차지 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 상단 회색 바 (첫번째 이미지) */
+.main-top-bar {
+    height: 60px; /* 상단 바 높이 */
+    background-color: #f7f9fa; /* 사이드바와 유사한 배경 */
+    border-bottom: 1px solid #e0e0e0;
+    /* 만약 첫번째 이미지의 HMH 로고가 사이드바가 아니라
+      이 상단 바에 있는 것이라면, 여기에 로고를 배치해야 합니다.
+      (지금은 비워둠)
+    */
+}
+
+.content-wrapper {
+    padding: 40px;
+    max-width: 900px; /* 콘텐츠 최대 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.main-content h1 {
+    font-size: 32px;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 30px;
+}
+
+.prompt-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.prompt-box textarea {
+    width: 100%;
+    height: 100px; /* 입력창 높이 */
+    border: 2px solid #00C78B; /* HMH 테마 색상 테두리 */
+    border-radius: 15px;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+    resize: none; /* 크기 조절 비활성화 */
+    padding-right: 100px; /* 아이콘 들어갈 공간 확보 */
+}
+
+.prompt-icons {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 15px;
+    font-size: 20px;
+    color: #888;
+}
+
+.prompt-icons i {
+    cursor: pointer;
+}
+
+.content-section {
+    margin-bottom: 40px;
+}
+
+.content-section h4 {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.card-row {
+    display: flex;
+    gap: 20px;
+}
+
+/* 문서 카드 (표준 이력서 등) */
+.document-card {
+    flex: 1; /* 1:1:1 비율 */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #f7f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    transition: box-shadow 0.2s;
+}
+
+.document-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.doc-icon {
+    font-size: 32px;
+}
+.icon-pdf { color: #e53935; } /* 빨강 */
+.icon-gdoc { color: #1e88e5; } /* 파랑 */
+.icon-gslides { color: #8e24aa; } /* 보라 */
+
+
+.card-text {
+    display: flex;
+    flex-direction: column;
+}
+.card-text strong {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.card-text span {
+    font-size: 13px;
+    color: #777;
+}
+
+/* 서비스 카드 (경험 쥐어짜내기 등) */
+.service-card {
+    flex: 1; /* 1:1:1 비율 */
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 25px;
+    text-decoration: none;
+    color: #333;
+    transition: box-shadow 0.2s;
+}
+
+.service-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.service-card .service-emoji {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 15px;
+    line-height: 1; /* (추가) 이모지 상자의 높이를 깔끔하게 맞춥니다 */
+}
+
+.service-card strong {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.service-card span {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.5;
+}
+
+
+
+/* --- 이력서 페이지 (resume.html) --- */
+
+/* =============================
+  1. 3단 레이아웃
+  =============================
+*/
+.resume-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* (기존 .sidebar 스타일은 재사용됨) */
+
+
+/* =============================
+  2. 중앙 콘텐츠 (resume-content)
+  =============================
+*/
+.resume-content {
+    flex: 1; /* 왼쪽과 오른쪽 사이드바를 제외한 모든 공간 차지 */
+    display: flex;
+    flex-direction: column; /* 헤더-뷰어-푸터를 세로로 쌓음 */
+    background-color: #f7f9fa; /* 중앙 배경색 */
+}
+
+.resume-header {
+    display: flex;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.header-left strong {
+    font-size: 18px;
+}
+.header-left span {
+    font-size: 14px;
+    color: #888;
+}
+
+/* 이력서가 스크롤되는 뷰어 영역 */
+.document-viewer {
+    flex: 1; /* 헤더/푸터를 제외한 모든 세로 공간 차지 */
+    overflow-y: auto; /* 내용이 길어지면 스크롤 */
+    padding: 40px;
+    display: flex;
+    justify-content: center; /* 이력서 용지를 가운데 정렬 */
+}
+
+/* 이력서 용지 (와이어프레임) */
+.resume-paper {
+    /* width: 700px; */
+    width: 100%;
+    min-height: 900px; /* 이력서 용지 크기 */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* --- (이력서 와이어프레임 스타일) --- */
+.resume-section-top {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.resume-photo {
+    width: 100px;
+    height: 130px;
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+}
+.resume-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+}
+.resume-line {
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+.resume-line.large { width: 80%; height: 30px; }
+.resume-line.medium { width: 60%; }
+.resume-line.full { width: 100%; margin-bottom: 15px; }
+.resume-section-box {
+    height: 150px;
+    background-color: #f9f9f9;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+/* --- (와이어프레임 스타일 끝) --- */
+
+
+/* 하단 입력창 */
+.resume-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #e6fffa; /* 민트색 배경 */
+    border: 1px solid #00e676;
+    border-radius: 10px;
+    margin: 20px 40px; /* 뷰어 영역과 떨어뜨리기 */
+}
+
+.resume-footer p {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.footer-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-buttons button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-correction {
+    background-color: #333;
+    color: white;
+}
+.btn-correction span {
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+.btn-edit {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.footer-buttons i {
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+/* =============================
+  3. 오른쪽 사이드바 (document-sidebar)
+  =============================
+*/
+.document-sidebar {
+    width: 340px; /* 오른쪽 사이드바 너비 */
+    background-color: #ffffff;
+    border-left: 1px solid #e0e0e0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column; /* 세로로 쌓기 */
+    box-sizing: border-box;
+}
+
+.doc-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.doc-sidebar-header h3 {
+    margin: 0;
+    font-size: 20px;
+}
+.doc-sidebar-header i {
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+}
+
+/* 탭 메뉴 (표준이력서, 경험정리서류...) */
+.doc-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+.doc-tab {
+    text-decoration: none;
+    color: #888;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px 4px;
+    border-bottom: 3px solid transparent;
+}
+.doc-tab.active,
+.doc-tab:hover {
+    color: #333;
+    border-bottom-color: #333;
+}
+
+.doc-description {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* 문서 목록 스크롤 영역 */
+.doc-list {
+    flex: 1; /* 남는 세로 공간 모두 차지 */
+    overflow-y: auto; /* 목록 길어지면 스크롤 */
+}
+
+.doc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.2s;
+}
+.doc-item:hover {
+    background-color: #f7f9fa; /* 마우스 올리면 배경색 */
+}
+.doc-item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.doc-item-info strong {
+    font-size: 15px;
+}
+.doc-item-actions {
+    display: flex;
+    gap: 8px;
+}
+.doc-item-actions a {
+    text-decoration: none;
+    font-size: 13px;
+    color: #888;
+    background-color: #eee;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+.doc-item-actions a:hover {
+    background-color: #ddd;
+}
+
+/* 참고항목 추가 버튼 */
+.add-reference-button {
+    width: 100%;
+    background-color: #e6fffa; /* 민트색 배경 */
+    border: 1px dashed #00e676;
+    color: #009688; /* 진한 민트색 글자 */
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 20px; /* 목록과 간격 띄우기 */
+}
+.add-reference-button:hover {
+    background-color: #d0fff5;
+}
+
+
+
+/* --- 경험 정리 서류 페이지 (experience.html) --- */
+
+.experience-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff; /* 이 페이지는 배경이 흰색 */
+    padding: 30px 60px; /* 좌우 여백을 더 줌 */
+}
+
+.experience-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.experience-header .header-text h1 {
+    margin: 0 0 5px 0;
+    font-size: 24px;
+    color: #333;
+}
+.experience-header .header-text span {
+    font-size: 16px;
+    color: #888;
+}
+
+.search-bar {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px; /* 둥근 검색창 */
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.search-bar input::placeholder {
+    color: #aaa;
+}
+
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.exp-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: box-shadow 0.2s;
+}
+
+.exp-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.exp-info {
+    flex: 1; /* 남는 공간 모두 차지 */
+}
+
+.exp-info strong {
+    font-size: 18px;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.exp-info .exp-tags {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.4;
+}
+
+.exp-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    color: #555;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-action:hover {
+    background-color: #e0e0e0;
+}
+.btn-action.btn-delete {
+    background-color: #fff;
+    border-color: #f44336; /* 빨간색 테두리 */
+    color: #f44336; /* 빨간색 글씨 */
+}
+.btn-action.btn-delete:hover {
+    background-color: #ffebee; /* 빨간색 계열 호버 */
+}
+
+/* 하단 ... 페이징 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+.pagination .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 50%;
+}
+.pagination .dot.active {
+    background-color: #333;
+}
+
+.service-section {
+    margin-top: 40px;
+}
+
+
+
+/* --- 채팅 페이지 (chat.html) --- */
+
+/* =============================
+  2. 중앙 콘텐츠 (chat-content)
+  =============================
+*/
+.chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff; /* 흰색 배경 */
+    height: 100vh; /* 화면 높이에 꽉 차도록 (스크롤은 내부에서) */
+    box-sizing: border-box;
+    /* resume.html과 동일한 좌우 여백 */
+    padding: 30px 60px;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 20px;
+}
+.chat-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.chat-header-actions {
+    display: flex;
+    gap: 10px;
+}
+.chat-header-actions button,
+.chat-header-actions a {
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-stop {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    color: #555;
+}
+.btn-exit {
+    background-color: #e6fffa;
+    border: 1px solid #00C78B;
+    color: #009688;
+}
+
+/* [핵심] 채팅 내용 스크롤 영역 */
+.chat-history-area {
+    flex: 1; /* 헤더와 푸터를 제외한 모든 공간 차지 */
+    overflow-y: auto; /* 내용 길어지면 자동 스크롤 */
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 채팅 말풍선 공통 스타일 */
+.chat-bubble {
+    padding: 15px 20px;
+    border-radius: 15px;
+    max-width: 70%;
+    line-height: 1.6;
+    word-wrap: break-word; /* 긴 단어 자동 줄바꿈 */
+}
+
+/* 사용자 말풍선 (오른쪽, 녹색) */
+.chat-bubble.user {
+    background-color: #e6fffa; /* 연한 민트색 */
+    color: #333;
+    align-self: flex-end; /* 오른쪽 정렬 */
+    border-top-right-radius: 5px;
+}
+
+/* AI 말풍선 (왼쪽, 회색) */
+.chat-bubble.ai {
+    background-color: #f7f9fa;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    align-self: flex-start; /* 왼쪽 정렬 */
+    border-top-left-radius: 5px;
+}
+
+/* AI 로딩 중 말풍선 */
+.chat-bubble.loading p {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+.loader-bar {
+    width: 80%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 8px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+.loader-bar:nth-child(2) { width: 90%; animation-delay: 0.2s; }
+.loader-bar:nth-child(3) { width: 70%; animation-delay: 0.4s; }
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+
+/* [핵심] 하단 입력창 */
+.chat-input-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    border: 2px solid #00C78B;
+    border-radius: 15px;
+    margin-top: 20px; /* 채팅창과의 간격 */
+}
+
+.chat-input-area textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none; /* 크기 조절 비활성화 */
+    font-size: 16px;
+    font-family: inherit;
+    height: 60px; /* 기본 높이 (내용 따라 늘어나게 JS로 조절 가능) */
+}
+
+.chat-input-area .btn-icon {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    padding: 5px;
+}
+.chat-input-area .btn-icon:hover {
+    color: #333;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    min-height: 1.2em; /* 에러 없을 때도 공간 차지 */
+}
+
+.sidebar-footer {
+    margin-top: auto; /* 사이드바 하단에 고정 */
+}
+.nav-button.logout {
+    background-color: #f0f0f0;
+    color: #555;
+    border-color: #ddd;
+}
+.nav-button.logout:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+/* style.css (하단에 추가) */
+.error-message {
+    color: #e53935; /* 빨간색 */
+    font-size: 13px;
+    margin-top: 5px;
+    min-height: 1.2em; /* 메시지가 없을 때도 공간을 차지해 레이아웃이 밀리지 않게 함 */
+}
+
+/* (선택 사항) 잘못된 입력창 테두리도 빨갛게 */
+.input-group input.invalid {
+    border-color: #e53935;
+}
+
+/* =============================
+  반응형 웹 (Responsive Web)
+============================= */
+
+/* 화면 너비가 768px 이하일 때 (태블릿/모바일)
+   이 중괄호 안의 스타일을 적용합니다. */
+@media (max-width: 768px) {
+
+    /* --- 1. 로그인/회원가입 페이지 --- */
+    
+    body.body-center-form, 
+    body.body-center-form-scroll {
+        /* 모바일에선 꽉 채워서 보여주기 위해 padding 추가 */
+        padding: 20px;
+        box-sizing: border-box; /* padding을 너비에 포함 */
+    }
+
+    /* 로고/로그인 박스 감싸는 컨테이너 */
+    .container {
+        flex-direction: column; /* 가로(row) -> 세로(column)로 쌓기 */
+        gap: 30px; /* 세로 간격 */
+    }
+
+    .intro-section .logo {
+        width: 150px; /* 모바일에선 로고 약간 작게 */
+    }
+
+    /* 로그인/회원가입 박스 */
+    .login-box,
+    .signup-box,
+    .signup-container {
+        width: 100%; /* 너비를 꽉 채우기 */
+        margin: 0; /* 중앙 정렬용 margin 제거 */
+        padding: 20px; /* 내부 여백 약간 줄이기 */
+    }
+
+    /* --- 2. 3단 레이아웃 (이력서, 채팅 등) --- */
+    
+    /* 레이아웃 전체를 세로로 쌓기 */
+    .resume-layout {
+        flex-direction: column;
+    }
+
+    /* (임시) 모바일에선 양쪽 사이드바를 숨깁니다. */
+    .sidebar,
+    .document-sidebar {
+        display: none; 
+        /* (참고) 실제 서비스에선 '햄버거 버튼(☰)'을 눌러야 
+         사이드바가 보이도록 JavaScript로 복잡하게 처리해야 하지만, 
+         지금은 우선 숨겨서 중앙 콘텐츠만 보이게 합니다.
+        */
+    }
+
+    /* 중앙 콘텐츠가 꽉 차도록 (좌우 여백 수정) */
+    .resume-content,
+    .experience-content,
+    .chat-content {
+        padding: 15px; /* 모바일용 좌우 여백 */
+        height: auto; /* 채팅창 높이 자동 조절 */
+    }
+
+    /* 이력서 용지 (모바일 꽉 채우기) */
+    .resume-paper {
+        width: 100%;
+        padding: 20px;
+    }
+
+    /* 홈 화면의 카드 (세로로 쌓기) */
+    .card-row {
+        flex-direction: column;
+    }
+}
