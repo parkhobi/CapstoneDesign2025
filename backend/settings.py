@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'accounts',  # 이건 우리가 곧 만들 앱 이름
+    'accounts', 
+    'career.apps.CareerConfig',
+
 ]
 
 MIDDLEWARE = [
