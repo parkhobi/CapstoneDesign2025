@@ -1207,3 +1207,291 @@ body {
         flex-direction: column;
     }
 }
+
+
+/* --- 표준 이력서 페이지 (resume.html) --- */
+
+/* 탭 네비게이션 */
+.resume-tabs-nav {
+    display: flex;
+    background-color: #e0f2ec; /* 연한 민트 배경 */
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    background: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+    background-color: #00C78B; /* 활성화된 탭 배경 */
+    color: white;
+    border-bottom-color: #009468;
+}
+
+/* 탭 내용 영역 */
+.tab-content {
+    display: none; /* 기본적으로 숨김 */
+}
+.tab-content.active {
+    display: block; /* 활성화된 탭만 보임 */
+}
+
+/* 섹션 구분 */
+.section-title {
+    font-size: 18px;
+    color: #333;
+    border-left: 5px solid #00C78B;
+    padding-left: 10px;
+    margin: 30px 0 15px 0;
+}
+
+.section-box {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
+/* 기본 정보 그리드 (사진 + 텍스트) */
+.basic-info-grid {
+    display: flex;
+    gap: 20px;
+}
+.photo-area {
+    width: 120px;
+    flex-shrink: 0;
+}
+.photo-placeholder {
+    width: 100%;
+    height: 160px;
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #aaa;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+}
+.info-fields {
+    flex: 1;
+}
+
+/* 읽기 전용 입력창 스타일 */
+input[readonly] {
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+/* 4칸 그리드 (지원분야) */
+.four-column-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+/* 구분선 */
+.divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+}
+
+/* 날짜 범위 (~ 물결 표시) */
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 학점 입력 (점수 / 만점) */
+.grade-input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 파일 업로드 */
+.file-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    width: 100%;
+}
+
+/* 하단 버튼 영역 */
+.resume-save-area {
+    margin-top: 40px;
+    text-align: right;
+}
+.btn-save {
+    padding: 10px 20px;
+    border: 1px solid #00C78B;
+    background: white;
+    color: #00C78B;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-submit {
+    padding: 10px 20px;
+    border: none;
+    background: #00C78B;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* 모바일 반응형 (768px 이하) */
+@media (max-width: 768px) {
+    .basic-info-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .four-column-grid {
+        grid-template-columns: 1fr 1fr; /* 모바일엔 2열로 */
+    }
+    .date-range {
+        flex-direction: column; /* 날짜 세로로 */
+        align-items: flex-start;
+    }
+}
+
+
+/* --- 탭 3 (어학/자격/기타) 스타일 --- */
+
+/* 섹션 헤더 (제목 + 추가 버튼 가로 배치) */
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-left: 5px solid #00C78B; /* 녹색 바 */
+    padding-left: 15px;
+}
+
+.section-header-row .section-title {
+    margin: 0;
+    border: none; /* 기존 border 제거 */
+    padding: 0;
+}
+
+/* + 추가 버튼 */
+.btn-add-row {
+    background-color: #e0f2ec;
+    color: #00b07b;
+    border: 1px solid #00C78B;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.btn-add-row:hover {
+    background-color: #00C78B;
+    color: white;
+}
+
+/* 동적으로 추가되는 아이템 박스 */
+.resume-item-box {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative; /* 삭제 버튼 위치 기준 */
+}
+
+/* 삭제 버튼 */
+.btn-remove-item {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #e57373;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-remove-item:hover {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+/* 구분선 스타일 보완 */
+hr.divider {
+    border: 0;
+    border-top: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+
+/* --- 경험 정리 페이지 스타일 보완 --- */
+
+/* 검색창과 버튼 가로 배치 */
+.search-and-add {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* === 모달(Modal) 스타일 === */
+.modal-overlay {
+    display: none; /* 기본 숨김 */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은 배경 */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.open {
+    display: flex; /* 열리면 보임 */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 500px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-header h2 { margin: 0; font-size: 20px; }
+.modal-header i { cursor: pointer; font-size: 20px; color: #888; }
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}

@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="resume-layout"> 
+    <div class="resume-layout">
         <div id="sidebar-left-placeholder"></div>
 
-        <main class="experience-content"> 
+        <main class="experience-content">
             <header class="experience-header">
                 <span class="doc-icon icon-gdoc">📘</span>
                 <div class="header-text">
@@ -21,58 +21,58 @@
                 </div>
             </header>
 
-            <div class="search-bar">
-                <input type="text" placeholder="#키워드 검색">
-            </div>
-
-            <div class="experience-list">
-                <div class="exp-item">
-                    <span class="doc-icon icon-gdoc">📘</span>
-                    <div class="exp-info">
-                        <strong>00 대외활동</strong>
-                        <span class="exp-tags">#2025.03.08-2025.08.09 #첫도전 #성장 #축구 #취미</span>
-                    </div>
-                    <div class="exp-actions">
-                        <button class="btn-action">확인하기</button>
-                        <button class="btn-action btn-delete">삭제하기</button>
-                    </div>
+            <div class="search-and-add">
+                <div class="search-bar" style="margin-bottom: 0; flex: 1;">
+                    <input type="text" placeholder="#키워드 검색">
                 </div>
-                <div class="exp-item">
-                    <span class="doc-icon icon-gdoc">📘</span>
-                    <div class="exp-info">
-                        <strong>00 대회</strong>
-                        <span class="exp-tags">#2024.03.08-2024.08.09 #첫대회 #부상 #이겨냄</span>
-                    </div>
-                    <div class="exp-actions">
-                        <button class="btn-action">확인하기</button>
-                        <button class="btn-action btn-delete">삭제하기</button>
-                    </div>
-                </div>
-                <div class="exp-item">
-                    <span class="doc-icon icon-gdoc">📘</span>
-                    <div class="exp-info">
-                        <strong>00 공모전</strong>
-                        <span class="exp-tags">#2025.03.08-2025.08.09 #협력 #장려상 #좋은팀원</span>
-                    </div>
-                    <div class="exp-actions">
-                        <button class="btn-action">확인하기</button>
-                        <button class="btn-action btn-delete">삭제하기</button>
-                    </div>
-                </div>
+                <button id="btn-open-modal" class="btn-submit" style="width: auto; padding: 0 20px; height: 46px;">
+                    + 경험 추가
+                </button>
             </div>
             
-            <div class="pagination">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
+            <br> <div class="experience-list" id="experience-list-container">
+                </div>
+            
+            <div class="pagination">...</div>
 
         </main>
 
         <div id="sidebar-right-placeholder"></div>
+    </div>
 
-    </div> 
-    <script src="common.js"></script>
+    <div id="exp-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>새로운 경험 추가</h2>
+                <i class="fas fa-times close-modal"></i>
+            </div>
+            <form id="exp-form">
+                <div class="input-group">
+                    <label>경험 제목</label>
+                    <input type="text" id="exp-title" placeholder="예: 00 대외활동" required>
+                </div>
+                <div class="input-row">
+                    <div class="input-group half-width">
+                        <label>시작일</label>
+                        <input type="date" id="exp-start" required>
+                    </div>
+                    <div class="input-group half-width">
+                        <label>종료일</label>
+                        <input type="date" id="exp-end" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>태그 (키워드)</label>
+                    <input type="text" id="exp-tags" placeholder="예: #도전 #성장 (띄어쓰기로 구분)">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-save close-modal">취소</button>
+                    <button type="submit" class="btn-submit">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="experience.js"></script>
 </body>
 </html>
