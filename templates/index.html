@@ -1,15 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMH - 메인</title>
-    <script src="common.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="{% static 'js/common.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="main-layout">
+        {% include '_sidebar-left.html' %}
         <div id="sidebar-left-placeholder"></div>
 
         <main class="main-content">
@@ -31,21 +33,21 @@
                 <section class="content-section">
                     <h4>취업 준비의 꽃 = 서류 준비</h4>
                     <div class="card-row">
-                        <a href="resume.html" class="document-card">
+                        <a href="/resume/" class="document-card">
                             <span class="doc-icon icon-pdf">📄</span>
                             <div class="card-text">
                                 <strong>표준 이력서</strong>
                                 <span>한번 만들어 두면 10만년 씀</span>
                             </div>
                         </a>
-                        <a href="experience.html" class="document-card">
+                        <a href="/experience/" class="document-card">
                             <span class="doc-icon icon-gdoc">📘</span>
                             <div class="card-text">
                                 <strong>경험 정리 서류</strong>
                                 <span>너만의 경험 도토리 창고</span>
                             </div>
                         </a>
-                        <a href="mungteong.html" class="document-card">
+                        <a href="/mungteong/" class="document-card">
                             <span class="doc-icon icon-gslides">📗</span>
                             <div class="card-text">
                                 <strong>뭉텅이</strong>
@@ -58,8 +60,7 @@
         </main>
 
     </div>
-
-    <script src="common.js"></script>
+    <script src="{% static 'js/common.js' %}"></script>
     <script>
         // index.html에 추가할 스크립트
         document.addEventListener('DOMContentLoaded', () => {
@@ -75,7 +76,7 @@
                 localStorage.setItem('initialPrompt', promptText);
                 
                 // 새로운 채팅 페이지로 이동
-                window.location.href = 'chat.html';
+                window.location.href = '/chat/';
             }
 
             // 1. 검색 아이콘 클릭 시

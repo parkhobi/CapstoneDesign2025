@@ -1,15 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>뭉텅이 - HMH</title> <!-- ◀ title 수정 -->
-    <script src="common.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="{% static 'js/common.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="resume-layout">
+        {% include '_sidebar-left.html' %}
         <div id="sidebar-left-placeholder"></div>
 
         <main class="experience-content"> 
@@ -59,10 +61,10 @@
             </div>
             
         </main>
-
+        {% include '_sidebar-right.html' %}
         <div id="sidebar-right-placeholder"></div>
 
     </div>
-    <script src="common.js"></script>
+    <script src="{% static 'js/common.js' %}"></script>
 </body>
 </html>

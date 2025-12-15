@@ -18,6 +18,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from accounts import views  # ★ 중요: accounts 앱의 views.py를 가져옵니다!
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +28,16 @@ urlpatterns = [
 
     # DRF 기본 로그인/로그아웃 (브라우저 browsable API용, 선택)
     path('api-auth/', include('rest_framework.urls')),
+    
+    path('', views.index, name='index'),          # 메인 페이지
+    path('login/', views.login_view, name='login'), # 로그인 페이지
+    path('signup/', views.signup_view, name='signup'),
+    path('singupsuccess/', views.signupsuccess_view, name='signupsuccess'),
+    path('resume/', views.resume_view, name='resume'),
+    path('profile/', views.profile_view, name='profile'),
+    path('mungteong/', views.mungteong_view, name='mungteong'),
+    path('experience/', views.experience_view, name='experience'),
+    path('chat/', views.chat_view, name='chat'),
+    path('addinfo/', views.addinfo_view, name='addinfo'),
 ]
 

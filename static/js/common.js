@@ -3,12 +3,12 @@
     const token = localStorage.getItem('accessToken');
     
     // 현재 페이지가 로그인/회원가입 페이지가 *아닌데*
-    const isProtectedPage = !window.location.pathname.endsWith('login.html') && 
-                            !window.location.pathname.endsWith('signup.html');
+    const isProtectedPage = !window.location.pathname.endsWith('/login/') && 
+                            !window.location.pathname.endsWith('/signup/');
 
     if (!token && isProtectedPage) {
         // 토큰이 없으면 로그인 페이지로 강제 이동
-        window.location.href = 'login.html';
+        window.location.href = '/login/';
     } else if (token && isProtectedPage) {
         // 토큰이 있으면, 공통 레이아웃 로드 *전에* 사용자 정보부터 가져옴
         fetchAndDisplayUserInfo(token);
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function fetchAndDisplayUserInfo(token) {
     // [백엔드 약속] 사용자 정보를 반환하는 API 주소
-    const API_ENDPOINT = 'http://localhost:8000/api/auth/me/'; 
+    const API_ENDPOINT = '/api/auth/me/'; 
 
     try {
         const response = await fetch(API_ENDPOINT, {
@@ -53,7 +53,7 @@ async function fetchAndDisplayUserInfo(token) {
             // 401 (Unauthorized): 토큰이 만료되었거나 유효하지 않음
             localStorage.removeItem('accessToken');
             localStorage.removeItem('userName');
-            window.location.href = 'login.html';
+            window.location.href = '/login/';
         }
     } catch (error) {
         console.error('사용자 정보 요청 오류:', error);
@@ -129,8 +129,8 @@ function setActiveTab() {
 function setActiveNav() {
     const currentPage = window.location.pathname.split('/').pop();
 
-    if (currentPage === 'index.html') {
-        document.querySelector('.nav-button[href="index.html"]')?.classList.add('active');
+    if (currentPage === '/') {
+        document.querySelector('.nav-button[href="/"]')?.classList.add('active');
     }
 }
 
@@ -146,7 +146,7 @@ function setupLogoutButton() {
         if (event.target && event.target.id === 'logout-button') {
             localStorage.removeItem('authToken');
             localStorage.removeItem('userName');
-            window.location.href = 'login.html';
+            window.location.href = '/login/';
         }
     });
 }

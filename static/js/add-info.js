@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!token) {
             alert('로그인 정보가 없습니다. 다시 로그인해 주세요.');
-            window.location.href = 'login.html';
+            window.location.href = '/login/';
             return;
         }
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 3. [백엔드 연결] 프로필 저장 API 요청
         // 백엔드 개발자에게 받은 주소로 변경하세요.
-        const API_ENDPOINT = 'http://localhost:8000/api/auth/me/';
+        const API_ENDPOINT = '/api/auth/me/';
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 // 성공 시 성공 페이지로 이동
-                window.location.href = 'signup-success.html'; 
+                window.location.href = '/singupsuccess/'; 
             } else {
                 // 실패 시 에러 처리
                 const data = await response.json();

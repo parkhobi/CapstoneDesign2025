@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>추가 정보 입력 - HMH</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="body-center-form-scroll">
     <div class="signup-container">
@@ -14,7 +15,7 @@
             정확한 진로 상담을 위해 이력서 정보를 입력해 주세요.
         </p>
         
-        <form action="signup-success.html">
+        <form action="/signupsuccess/">
             <h2>기본 정보</h2>
             <div class="input-row">
                 <div class="input-group half-width">
@@ -58,6 +59,7 @@
             <button type="submit" class="signup-button">완료</button>
         </form>
     </div>
-    <script src="add-info.js"></script>
+
+    <script src="{% static 'js/add-info.js' %}"></script>
 </body>
 </html>

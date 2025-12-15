@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!token) { /* 로그인 체크 생략 (common.js가 해줌) */ }
 
     // API 주소
-    const API_ENDPOINT = 'http://localhost:8000/api/v1/experiences'; 
+    const API_ENDPOINT = '/api/v1/experiences'; 
 
     // --- [기능 1] 모달 열기/닫기 ---
     btnOpen.addEventListener('click', () => {

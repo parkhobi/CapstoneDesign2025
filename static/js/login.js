@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // [백엔드 약속] Django 서버의 로그인 API 주소
-        const API_ENDPOINT = 'http://localhost:8000/api/auth/login/'; 
+        const API_ENDPOINT = '/api/auth/login/'; 
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('refreshToken', data.refresh); 
 
                 // 3. 메인 페이지(index.html)로 이동
-                window.location.href = 'index.html'; 
+                window.location.href = '/'; 
             } else { // 4. 로그인 실패 (아이디/비번 틀림 등)
                 errorMessage.textContent = data.error || '아이디/비밀번호를 확인하세요.';
             }
@@ -47,6 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 메인 페이지(index.html)로 이동
-        window.location.href = 'index.html';
+        window.location.href = '/';
     });
 });

@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
         alert('로그인이 필요합니다.');
-        window.location.href = 'login.html';
+        window.location.href = '/login/';
         return;
     }
 
     // 3. [백엔드 연결] 실제 AI 채팅 API 주소
     // (백엔드 개발자에게 받은 주소로 꼭 수정하세요!)
-    const API_ENDPOINT = 'http://localhost:8000/api/v1/chat';
+    const API_ENDPOINT = '/api/v1/chat';
 
 
     // --- (A) 페이지 로드 시: 홈에서 입력했던 첫 질문 처리 ---
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 // 토큰 만료 시
                 alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-                window.location.href = 'login.html';
+                window.location.href = '/login/';
             } else {
                 // 그 외 에러
                 throw new Error('API Error');

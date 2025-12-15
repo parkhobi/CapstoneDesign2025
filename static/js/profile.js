@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
         alert('로그인이 필요합니다.');
-        window.location.href = 'login.html';
+        window.location.href = '/login/';
         return;
     }
 
     // 백엔드 API 주소 (조회와 수정 주소가 같을 수도, 다를 수도 있음)
-    const API_ENDPOINT = 'http://localhost:8000/api/auth/me/';
+    const API_ENDPOINT = '/api/auth/me/';
 
 
     // --- [기능 1] 페이지 로드 시: 내 정보 불러오기 (GET) ---
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 alert('정보가 성공적으로 수정되었습니다!');
-                window.location.href = 'index.html';
+                window.location.href = '/';
             } else {
                 const data = await response.json();
                 alert('수정 실패: ' + JSON.stringify(data));

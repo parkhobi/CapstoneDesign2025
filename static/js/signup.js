@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isValid) return;
 
         // 3. [백엔드 연결] 회원가입 요청 보내기
-        const API_ENDPOINT = 'http://localhost:8000/api/auth/register/';
+        const API_ENDPOINT = '/api/auth/register/';
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // [성공 시]
                 // 회원가입 성공 후 '추가 정보 입력' 페이지로 이동
                 alert('회원가입이 완료되었습니다.');
-                window.location.href = 'add-info.html'; 
+                window.location.href = '/addinfo/'; 
             } else {
                 // [실패 시] 백엔드에서 보낸 에러 메시지 표시
                 // 예: "이미 존재하는 아이디입니다."
