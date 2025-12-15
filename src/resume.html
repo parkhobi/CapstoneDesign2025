@@ -17,42 +17,292 @@
                 <div class="header-left">
                     <span class="doc-icon icon-pdf">📄</span>
                     <strong>표준 이력서</strong>
-                    <span>#2025.03 #파이낸스 하반기</span>
                 </div>
-                </header>
+            </header>
 
-            <div class="document-viewer">
-                <div class="resume-paper">
-                    <div class="resume-section-top">
-                        <div class="resume-photo"></div>
-                        <div class="resume-info">
-                            <div class="resume-line large"></div>
-                            <div class="resume-line medium"></div>
-                            <div class="resume-line medium"></div>
-                        </div>
-                    </div>
-                    <div class="resume-line full"></div>
-                    <div class="resume-line full"></div>
-                    <div class="resume-line full"></div>
-                    <div class="resume-section-box"></div>
-                    <div class="resume-section-box"></div>
-                </div>
+            <div class="resume-tabs-nav">
+                <button class="tab-btn active" data-tab="tab-1">1. 기본정보</button>
+                <button class="tab-btn" data-tab="tab-2">2. 학력/연구/경력/NCS</button>
+                <button class="tab-btn" data-tab="tab-3">3. 어학/자격/기타</button>
+                <button class="tab-btn" data-tab="tab-4">4. 자기소개서</button>
             </div>
 
-            <footer class="resume-footer">
-                <p>변경하고 싶은 부분이 있어? 말만해!</p>
-                <div class="footer-buttons">
-                    <button class="btn-correction">교정/교열 선택하기 <span>신규</span></button>
-                    <button class="btn-edit">직접 수정하기</button>
-                    <i class="fas fa-microphone"></i>
-                    <i class="fas fa-image"></i>
-                </div>
-            </footer>
+            <div class="document-viewer">
+                <form id="resume-form" class="resume-paper">
+                    
+                    <div id="tab-1" class="tab-content active">
+                        <h2 class="section-title">기본 정보</h2>
+                        <div class="basic-info-grid">
+                            <div class="photo-area">
+                                <div class="photo-placeholder">
+                                    <i class="fas fa-user"></i>
+                                    <span>사진 등록</span>
+                                </div>
+                            </div>
+                            <div class="info-fields">
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>지원자</label>
+                                        <input type="text" id="res-name" readonly> </div>
+                                    <div class="input-group">
+                                        <label>영문이름</label>
+                                        <input type="text" id="res-name-en" readonly>
+                                    </div>
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>성별</label>
+                                        <input type="text" id="res-gender" readonly>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>국적</label>
+                                        <input type="text" id="res-nationality" readonly>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>주소</label>
+                                    <input type="text" id="res-address" readonly>
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>이메일</label>
+                                        <input type="text" id="res-email" readonly>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>전화번호</label>
+                                        <input type="text" id="res-phone" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="input-group">
+                            <label>지원분야</label>
+                            <div class="four-column-grid">
+                                <input type="text" placeholder="1지망">
+                                <input type="text" placeholder="2지망">
+                                <input type="text" placeholder="3지망">
+                                <input type="text" placeholder="4지망">
+                            </div>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group half-width">
+                                <label>직전연봉</label>
+                                <input type="text" placeholder="만원 단위 입력">
+                            </div>
+                            <div class="input-group half-width">
+                                <label>입사가능일자</label>
+                                <input type="date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-2" class="tab-content">
+                        
+                        <h2 class="section-title">고등학교</h2>
+                        <div class="section-box">
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="required">졸업구분</label>
+                                    <select>
+                                        <option>졸업</option><option>졸업예정</option><option>중퇴</option>
+                                        <option>휴학</option><option>재학</option><option>검정고시</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label class="required">재학기간</label>
+                                    <div class="date-range">
+                                        <input type="date"> ~ <input type="date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="required">학교명</label>
+                                    <input type="text" placeholder="학교명 입력">
+                                </div>
+                                <div class="input-group">
+                                    <label>소재지</label>
+                                    <select><option>지역 선택</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label>계열</label>
+                                    <select><option>계열 선택</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label>주간/야간</label>
+                                    <select><option>주간</option><option>야간</option></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="section-title">대학교</h2>
+                        <div class="section-box">
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label>학위구분</label>
+                                    <select>
+                                        <option>학사</option><option>전문학사</option>
+                                    </select></div>
+                                <div class="input-group"><label>입학구분</label>
+                                    <select><option>입학</option><option>편입</option></select></div>
+                                <div class="input-group"><label>졸업구분</label>
+                                    <select>
+                                        <option>졸업</option><option>졸업예정</option><option>중퇴</option>
+                                        <option>휴학</option><option>재학</option><option>검정고시</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group"><label>학교명</label><input type="text" placeholder="학교명"></div>
+                                <div class="input-group"><label>본교/분교</label><select><option>본교</option><option>분교</option></select></div>
+                                <div class="input-group"><label>재학기간</label><div class="date-range"><input type="date"> ~ <input type="date"></div></div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group"><label>전공계열</label><select><option>계열 선택</option></select></div>
+                                <div class="input-group"><label>전공명</label><input type="text" placeholder="전공 입력"></div>
+                                <div class="input-group"><label>학점</label>
+                                    <div class="grade-input">
+                                        <input type="text" placeholder="점수"> / 
+                                        <select><option>4.5</option><option>4.3</option><option>4.0</option></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="section-title">대학원</h2>
+                        <div class="section-box">
+                            <div class="input-row">
+                                <div class="input-group"><label>학위구분</label><select><option>석사</option><option>박사</option></select></div>
+                                <div class="input-group"><label>졸업구분</label><select><option>졸업</option><option>수료</option></select></div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group"><label>학교명</label><input type="text"></div>
+                                <div class="input-group"><label>전공명</label><input type="text"></div>
+                                <div class="input-group"><label>재학기간</label><div class="date-range"><input type="date"> ~ <input type="date"></div></div>
+                            </div>
+                        </div>
+
+                        <h2 class="section-title">경력사항</h2>
+                        <div class="section-box">
+                            <div class="input-row">
+                                <div class="input-group"><label>회사명</label><input type="text"></div>
+                                <div class="input-group"><label>근무기간</label><div class="date-range"><input type="date"> ~ <input type="date"></div></div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group"><label>부서</label><input type="text"></div>
+                                <div class="input-group"><label>직급</label><input type="text"></div>
+                                <div class="input-group"><label>연봉</label><input type="text" placeholder="만원"></div>
+                            </div>
+                            <div class="input-group">
+                                <label>담당업무</label>
+                                <input type="text" placeholder="담당 업무 입력">
+                            </div>
+                            <div class="input-group">
+                                <label>퇴직사유</label>
+                                <input type="text" placeholder="퇴직 사유 입력">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>경험 및 경력기술서</label>
+                            <textarea placeholder="상세 경력 내용을 입력하세요..." rows="5"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>포트폴리오 첨부</label>
+                            <input type="file" class="file-input">
+                        </div>
+
+                    </div>
+
+                    <div id="tab-3" class="tab-content">
+
+                        <div class="dynamic-section">
+                            <div class="section-header-row">
+                                <h2 class="section-title">공인외국어시험</h2>
+                                <button type="button" class="btn-add-row" onclick="addResumeItem('lang-test')">
+                                    <i class="fas fa-plus"></i> 추가
+                                </button>
+                            </div>
+                            <div id="container-lang-test" class="item-container">
+                                </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="dynamic-section">
+                            <div class="section-header-row">
+                                <h2 class="section-title">외국어 활용능력</h2>
+                                <button type="button" class="btn-add-row" onclick="addResumeItem('language')">
+                                    <i class="fas fa-plus"></i> 추가
+                                </button>
+                            </div>
+                            <div id="container-language" class="item-container"></div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="dynamic-section">
+                            <div class="section-header-row">
+                                <h2 class="section-title">해외경험</h2>
+                                <button type="button" class="btn-add-row" onclick="addResumeItem('overseas')">
+                                    <i class="fas fa-plus"></i> 추가
+                                </button>
+                            </div>
+                            <div id="container-overseas" class="item-container"></div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="dynamic-section">
+                            <div class="section-header-row">
+                                <h2 class="section-title">자격증 / 면허증</h2>
+                                <button type="button" class="btn-add-row" onclick="addResumeItem('license')">
+                                    <i class="fas fa-plus"></i> 추가
+                                </button>
+                            </div>
+                            <div id="container-license" class="item-container"></div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="dynamic-section">
+                            <div class="section-header-row">
+                                <h2 class="section-title">컴퓨터 활용능력</h2>
+                                <button type="button" class="btn-add-row" onclick="addResumeItem('computer')">
+                                    <i class="fas fa-plus"></i> 추가
+                                </button>
+                            </div>
+                            <div id="container-computer" class="item-container"></div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="dynamic-section">
+                            <div class="section-header-row">
+                                <h2 class="section-title">수상경력</h2>
+                                <button type="button" class="btn-add-row" onclick="addResumeItem('award')">
+                                    <i class="fas fa-plus"></i> 추가
+                                </button>
+                            </div>
+                            <div id="container-award" class="item-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="resume-save-area">
+                        <button type="button" class="btn-save">임시 저장</button>
+                        <button type="submit" class="btn-submit">제출하기</button>
+                    </div>
+
+                </form>
+            </div>
         </main>
 
         <div id="sidebar-right-placeholder"></div>
+    </div>
 
-    </div> 
-    <script src="common.js"></script>
+    <script src="resume.js"></script>
 </body>
 </html>
