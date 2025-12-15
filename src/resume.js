@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 2. 기본 정보 불러오기 (프로필 데이터 연동)
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('accessToken');
     const API_PROFILE = 'http://localhost:8000/api/v1/profile';
 
     // 입력창 요소들 (ID가 res- 로 시작함)

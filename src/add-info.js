@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); // 기본 제출 막기
         
         // 1. 저장된 토큰 가져오기 (이게 없으면 저장 불가)
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('accessToken');
         
         if (!token) {
             alert('로그인 정보가 없습니다. 다시 로그인해 주세요.');
@@ -16,19 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. 입력된 값들로 데이터 객체 만들기
         // (주의: 백엔드가 원하는 필드명(key)과 일치해야 함)
-        const profileData = {
-            name_ko: document.getElementById('name-ko').value,
-            name_en: document.getElementById('name-en').value,
-            gender: document.getElementById('gender').value,
-            nationality: document.getElementById('nationality').value,
-            address: document.getElementById('address').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value
+        const requestBody = {
+            email: document.getElementById('email').value, // 이메일은 profile 밖
+            profile: {
+                name_kor: document.getElementById('name-ko').value,
+                name_eng: document.getElementById('name-en').value,
+                gender: document.getElementById('gender').value, // "M" or "F"
+                nationality: document.getElementById('nationality').value,
+                address1: document.getElementById('address').value, // 상세주소 1
+                phone: document.getElementById('phone').value
+                // postal_code, address2는 현재 입력창이 없으므로 생략 (부분 수정 가능하므로 OK)
+            }
         };
         
         // 3. [백엔드 연결] 프로필 저장 API 요청
         // 백엔드 개발자에게 받은 주소로 변경하세요.
-        const API_ENDPOINT = '/api/v1/login';
+        const API_ENDPOINT = 'http://localhost:8000/api/auth/me/';
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // [핵심] 인증 토큰을 헤더에 포함
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(profileData)
+                body: JSON.stringify(requestBody)
             });
 
             if (response.ok) {

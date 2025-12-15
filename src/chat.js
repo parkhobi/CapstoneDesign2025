@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatSubmit = document.getElementById('chat-submit');
 
     // 2. 토큰 확인 (로그인 안 했으면 쫓아내기)
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
         alert('로그인이 필요합니다.');
         window.location.href = 'login.html';

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const listContainer = document.getElementById('experience-list-container');
 
     // 토큰 확인 (로그인 체크)
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) { /* 로그인 체크 생략 (common.js가 해줌) */ }
 
     // API 주소

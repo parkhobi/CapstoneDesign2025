@@ -1,6 +1,6 @@
 // 페이지 로드 시 즉시 실행 (문지기 역할)
 (function checkAuthentication() {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('accessToken');
     
     // 현재 페이지가 로그인/회원가입 페이지가 *아닌데*
     const isProtectedPage = !window.location.pathname.endsWith('login.html') && 
@@ -26,31 +26,32 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function fetchAndDisplayUserInfo(token) {
     // [백엔드 약속] 사용자 정보를 반환하는 API 주소
-    const API_ENDPOINT = '/api/v1/me'; 
+    const API_ENDPOINT = 'http://localhost:8000/api/auth/me/'; 
 
     try {
         const response = await fetch(API_ENDPOINT, {
             method: 'GET',
             headers: {
                 // [핵심] 요청 헤더에 토큰을 실어 보냄
-                'Authorization': `Bearer ${token}` 
+                'Authorization': `Bearer ${token}`
             }
         });
 
         if (response.ok) {
-            const userData = await response.json(); // { "name": "OOO" }
+            const data = await response.json();
             
-            // (주의!) 이 코드는 common.js가 로드된 *이후*에 실행되므로,
-            // 동적으로 로드될 HTML 요소가 아닌, *페이지 자체*에 있는 요소를 바꿔야 함.
-            // index.html의 "홍길동님"을 바꿀 준비.
-            // (이 부분은 loadLayout과 연동되어야 함 - 4단계에서 수정)
+            // ★ 중요: 백엔드 구조에 맞춰 profile 안의 name_kor 접근
+            // 프로필이 비어있을 경우를 대비해 id라도 보여주도록 처리
+            const userName = (data.profile && data.profile.name_kor) ? data.profile.name_kor : data.id;
             
-            // 임시로 사용자 이름을 localStorage에도 저장해두면 편함
-            localStorage.setItem('userName', userData.name);
-
+            // HTML에 이름 표시 (user-greeting 요소가 있다고 가정)
+            const greetingElement = document.getElementById('user-greeting');
+            if (greetingElement) {
+                greetingElement.textContent = `안녕하세요, ${userName}님`;
+            }
         } else if (response.status === 401) {
             // 401 (Unauthorized): 토큰이 만료되었거나 유효하지 않음
-            localStorage.removeItem('authToken');
+            localStorage.removeItem('accessToken');
             localStorage.removeItem('userName');
             window.location.href = 'login.html';
         }

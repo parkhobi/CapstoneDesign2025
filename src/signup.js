@@ -48,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isValid) return;
 
         // 3. [백엔드 연결] 회원가입 요청 보내기
-        // 백엔드 개발자에게 받은 실제 회원가입 API 주소를 넣으세요.
-        const API_ENDPOINT = '/api/v1/login'; 
+        const API_ENDPOINT = 'http://localhost:8000/api/auth/register/';
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -59,17 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 // 백엔드가 원하는 데이터 필드명(키값)에 맞춰서 보내야 합니다.
                 body: JSON.stringify({
-                    username: usernameInput.value,
+                    id: usernameInput.value,         // 백엔드가 'id'를 원함
                     password: passwordInput.value,
+                    password_confirm: passwordConfirmInput.value // 필수 전송
                 }),
             });
 
             const data = await response.json();
 
-            if (response.ok) {
+            if (response.status === 201) {
                 // [성공 시]
                 // 회원가입 성공 후 '추가 정보 입력' 페이지로 이동
-                alert('회원가입이 완료되었습니다.'); // 필요시 alert 제거 가능
+                alert('회원가입이 완료되었습니다.');
                 window.location.href = 'add-info.html'; 
             } else {
                 // [실패 시] 백엔드에서 보낸 에러 메시지 표시

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const phoneInput = document.getElementById('phone');
     
     // 1. 토큰 확인
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
         alert('로그인이 필요합니다.');
         window.location.href = 'login.html';
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 백엔드 API 주소 (조회와 수정 주소가 같을 수도, 다를 수도 있음)
-    const API_ENDPOINT = 'http://localhost:8000/api/v1/profile';
+    const API_ENDPOINT = 'http://localhost:8000/api/auth/me/';
 
 
     // --- [기능 1] 페이지 로드 시: 내 정보 불러오기 (GET) ---
@@ -34,15 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const data = await response.json();
+                const profile = data.profile || {}; // profile이 없을 경우 대비
                 // 받아온 데이터로 입력창 채우기
-                // (백엔드에서 오는 데이터 필드명 확인 필요: data.name, data.gender 등)
-                nameKoInput.value = data.name_ko || '';
-                nameEnInput.value = data.name_en || '';
-                genderInput.value = data.gender || '';
-                nationalityInput.value = data.nationality || '';
-                addressInput.value = data.address || '';
                 emailInput.value = data.email || '';
-                phoneInput.value = data.phone || '';
+                nameKoInput.value = profile.name_kor || '';
+                nameEnInput.value = profile.name_eng || '';
+                genderInput.value = profile.gender || ''; // "M" or "F"
+                nationalityInput.value = profile.nationality || '';
+                addressInput.value = profile.address1 || ''; // address1을 주소창에 표시
+                phoneInput.value = profile.phone || '';
             } else {
                 console.error('프로필 불러오기 실패');
             }
@@ -59,18 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); 
         
         const updatedData = {
-            name_ko: nameKoInput.value,
-            name_en: nameEnInput.value,
-            gender: genderInput.value,
-            nationality: nationalityInput.value,
-            address: addressInput.value,
             email: emailInput.value,
-            phone: phoneInput.value
+            profile: {
+                name_kor: nameKoInput.value,
+                name_eng: nameEnInput.value,
+                gender: genderInput.value,
+                nationality: nationalityInput.value,
+                address1: addressInput.value,
+                phone: phoneInput.value
+            }
         };
 
         try {
             const response = await fetch(API_ENDPOINT, {
-                method: 'PUT', // 수정은 보통 PUT 또는 PATCH
+                method: 'PATCH', // 수정은 보통 PUT 또는 PATCH
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'index.html';
             } else {
                 const data = await response.json();
-                alert(data.error || '정보 수정에 실패했습니다.');
+                alert('수정 실패: ' + JSON.stringify(data));
             }
         } catch (error) {
             console.error('프로필 수정 통신 오류:', error);
