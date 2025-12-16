@@ -19,10 +19,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts import views  # ★ 중요: accounts 앱의 views.py를 가져옵니다!
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from career import views as career_views  # career 앱의 뷰를 가져옴
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/experience/<int:pk>/', career_views.ExperienceDetailView.as_view(), name='experience_delete'),
+    path('api/experiences/', career_views.ExperienceListCreateView.as_view(), name='experience_list_create'),
+    path('api/resume/', career_views.StandardResumeView.as_view(), name='standard_resume'),
+    path('api/cover-letters/', career_views.CoverLetterListView.as_view(), name='cover_letter_list'),
+    path('api/chat-sessions/', career_views.ChatSessionListView.as_view(), name='chat_session_list'),
+    
     # accounts 앱의 URL들을 /api/auth/ 로 묶어서 사용
     path('api/auth/', include('accounts.urls')),
 

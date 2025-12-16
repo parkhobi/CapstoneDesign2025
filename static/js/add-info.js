@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(API_ENDPOINT, {
-                method: 'POST', // 처음 생성이면 POST, 수정이면 PUT
+                method: 'PATCH', // 처음 생성이면 POST, 수정이면 PUT
                 headers: {
                     'Content-Type': 'application/json',
                     // [핵심] 인증 토큰을 헤더에 포함

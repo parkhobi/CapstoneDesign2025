@@ -36,7 +36,7 @@ body.body-center-form-scroll {
 
 .intro-section .logo {
     /* Figma에서 확인한 로고 크기 */
-    width: 200px; /* 예시 값, Figma에서 정확한 너비를 확인하세요 */
+    width: 100px; /* 예시 값, Figma에서 정확한 너비를 확인하세요 */
     margin-bottom: 15px; /* 로고와 '안녕하세요!' 사이 간격 */
 }
 
@@ -1494,4 +1494,47 @@ hr.divider {
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
+}
+
+
+/* --- 프로필 수정 페이지 버튼 그룹 스타일 --- */
+
+/* 버튼들을 가로로 나란히 배치 */
+.button-group {
+    display: flex;
+    gap: 10px; /* 버튼 사이 간격 */
+    margin-top: 30px;
+}
+
+/* 취소 버튼 디자인 (회색 톤) */
+.button-group .cancel-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 25%; /* 취소 버튼 30% */
+    transition: background-color 0.2s;
+    text-align: center; /* 글자 가운데 정렬 */
+}
+
+.cancel-button:hover {
+    background-color: #d0d0d0;
+}
+
+/* 버튼 그룹 안에 있는 '수정 완료' 버튼만 70%로 조정 */
+.button-group .signup-button {
+    width: 75%; 
+    margin-top: 0; /* 기존 마진 제거 */
+}
+
+/* 사이드바 로고 크기 조절 */
+.sidebar-logo .logo {
+    max-width: 70px; /* 원하는 너비로 조절 (예: 120px ~ 160px) */
+    height: auto;     /* 비율 유지 */
+    display: block;   
+    margin: 0 auto;   /* 가운데 정렬 */
 }

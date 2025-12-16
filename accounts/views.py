@@ -110,7 +110,7 @@ def signup_view(request):
     return render(request, 'signup.html')
 
 def signupsuccess_view(request):
-    return render(request, 'singup-success.html')
+    return render(request, 'signup-success.html')
 
 def resume_view(request):
     return render(request, 'resume.html')

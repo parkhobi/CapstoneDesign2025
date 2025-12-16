@@ -3,67 +3,67 @@ document.addEventListener('DOMContentLoaded', () => {
     // 요소 가져오기
     const modal = document.getElementById('exp-modal');
     const btnOpen = document.getElementById('btn-open-modal');
-    const btnCloseList = document.querySelectorAll('.close-modal'); // 닫기 버튼들
+    const btnCloseList = document.querySelectorAll('.close-modal');
     const expForm = document.getElementById('exp-form');
     const listContainer = document.getElementById('experience-list-container');
 
-    // 토큰 확인 (로그인 체크)
+    // 토큰 확인
     const token = localStorage.getItem('accessToken');
-    if (!token) { /* 로그인 체크 생략 (common.js가 해줌) */ }
+    if (!token) {
+        alert("로그인이 필요합니다.");
+        window.location.href = '/login/';
+        return;
+    }
 
-    // API 주소
-    const API_ENDPOINT = '/api/v1/experiences'; 
+    // ★ [수정] 백엔드 URL을 urls.py와 똑같이 맞춤
+    const API_ENDPOINT = '/api/experiences/'; 
 
-    // --- [기능 1] 모달 열기/닫기 ---
-    btnOpen.addEventListener('click', () => {
-        modal.classList.add('open');
-    });
+    // 모달 열기/닫기
+    btnOpen.addEventListener('click', () => modal.classList.add('open'));
+    btnCloseList.forEach(btn => btn.addEventListener('click', () => modal.classList.remove('open')));
 
-    btnCloseList.forEach(btn => {
-        btn.addEventListener('click', () => {
-            modal.classList.remove('open');
-        });
-    });
-
-    // --- [기능 2] 목록 불러오기 (GET) ---
+    // --- [기능 1] 목록 불러오기 (GET) ---
     async function loadExperiences() {
-        // [백엔드 연결 시 주석 해제]
-        /*
         try {
             const response = await fetch(API_ENDPOINT, {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
-                const data = await response.json(); // data는 배열이어야 함
+                const data = await response.json();
                 renderList(data);
             }
-        } catch (error) { console.error(error); }
-        */
-
-        // [현재: 테스트용 가짜 데이터]
-        const dummyData = [
-            { id: 1, title: "00 대외활동", date: "2025.03.08-2025.08.09", tags: "#첫도전 #성장" },
-            { id: 2, title: "파이썬 프로젝트", date: "2024.01.01-2024.02.01", tags: "#코딩 #백엔드" }
-        ];
-        renderList(dummyData);
+        } catch (error) { console.error("목록 로드 실패:", error); }
     }
     
     // 화면에 그리는 함수
     function renderList(items) {
         listContainer.innerHTML = ""; // 초기화
 
+        if (items.length === 0) {
+            listContainer.innerHTML = "<p style='text-align:center; padding:20px; color:#888;'>등록된 경험이 없습니다.</p>";
+            return;
+        }
+
         items.forEach(item => {
+            // 날짜 예쁘게 표시 (YYYY-MM-DD)
+            const dateStr = (item.start_date && item.end_date) 
+                          ? `${item.start_date} ~ ${item.end_date}` 
+                          : '날짜 미입력';
+
             const html = `
-                <div class="exp-item">
+                <div class="exp-item" id="exp-item-${item.id}">
                     <span class="doc-icon icon-gdoc">📘</span>
                     <div class="exp-info">
                         <strong>${item.title}</strong>
-                        <span class="exp-tags">${item.date} ${item.tags}</span>
+                        <span class="exp-tags" style="color:#666; font-size:0.9em;">
+                            ${dateStr} <br> 
+                            <span style="color:#4a90e2;">${item.tags}</span>
+                        </span>
                     </div>
                     <div class="exp-actions">
                         <button class="btn-action">확인하기</button>
-                        <button class="btn-action btn-delete">삭제하기</button>
+                        <button class="btn-action btn-delete" onclick="deleteExperience(${item.id})">삭제하기</button>
                     </div>
                 </div>
             `;
@@ -73,10 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadExperiences(); // 페이지 로드 시 실행
 
-
-    // --- [기능 3] 새 경험 추가하기 (POST) ---
+    // --- [기능 2] 새 경험 추가하기 (POST) ---
     expForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // 새로고침 막기
 
         // 입력값 가져오기
         const title = document.getElementById('exp-title').value;
@@ -91,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tags: tags
         };
 
-        // [백엔드 연결]
         try {
             const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
@@ -103,40 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                alert('경험이 추가되었습니다!');
+                alert('경험이 성공적으로 저장되었습니다! 🎉'); // 진짜 성공 메시지
                 modal.classList.remove('open'); // 모달 닫기
                 expForm.reset(); // 입력창 비우기
-                loadExperiences(); // 목록 다시 불러오기 (새로고침)
+                loadExperiences(); // 목록 다시 불러오기 (진짜 데이터)
             } else {
-                // [테스트용] 백엔드 없을 때 성공 처리 (나중에 지우세요)
-                alert('경험 추가 성공 (테스트)');
-                modal.classList.remove('open');
-                
-                // 가짜로 화면에 하나 추가해보기
-                const tempItem = { 
-                    title: title, 
-                    date: `${start}~${end}`, 
-                    tags: tags 
-                };
-                // 기존 목록에 추가하는 척 (새로고침하면 사라짐)
-                const currentHtml = listContainer.innerHTML;
-                const newHtml = `
-                    <div class="exp-item">
-                        <span class="doc-icon icon-gdoc">📘</span>
-                        <div class="exp-info">
-                            <strong>${tempItem.title}</strong>
-                            <span class="exp-tags">${tempItem.date} ${tempItem.tags}</span>
-                        </div>
-                        <div class="exp-actions">
-                            <button class="btn-action">확인하기</button>
-                            <button class="btn-action btn-delete">삭제하기</button>
-                        </div>
-                    </div>
-                `;
-                listContainer.innerHTML = newHtml + currentHtml;
+                // 실패 시 에러 처리
+                alert('저장에 실패했습니다. 내용을 확인해주세요.');
             }
         } catch (error) {
-            console.error(error);
+            console.error("저장 오류:", error);
+            alert("서버 연결에 실패했습니다.");
         }
     });
 });

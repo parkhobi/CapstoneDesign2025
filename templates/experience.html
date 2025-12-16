@@ -74,6 +74,36 @@
             </form>
         </div>
     </div>
+    <script>
+        // 삭제 버튼 누르면 실행될 함수
+        async function deleteExperience(id) {
+            if (!confirm("정말로 삭제하시겠습니까? 복구할 수 없습니다.")) {
+                return;
+            }
+
+            const token = localStorage.getItem('accessToken');
+            
+            try {
+                // 아까 만든 삭제 주소로 요청 보냄
+                const response = await fetch(`/api/experience/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert("삭제되었습니다.");
+                    window.location.reload(); // 화면 새로고침해서 목록 갱신
+                } else {
+                    alert("삭제 실패! (권한이 없거나 이미 삭제됨)");
+                }
+            } catch (error) {
+                console.error("삭제 오류:", error);
+                alert("서버 오류가 발생했습니다.");
+            }
+        }
+    </script>
     <script src="{% static 'js/experience.js' %}"></script>
 </body>
 </html>

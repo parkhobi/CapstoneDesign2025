@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>뭉텅이 - HMH</title> <!-- ◀ title 수정 -->
+    <title>뭉텅이 - HMH</title> 
     <script src="{% static 'js/common.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -24,47 +24,20 @@
             </header>
 
             <div class="search-bar">
-                <input type="text" placeholder="#키워드 검색">
+                <input type="text" placeholder="#키워드 검색 (준비중)">
             </div>
 
-            <div class="experience-list">
-                <div class="exp-item">
-                    <span class="doc-icon icon-gslides">📗</span> <!-- ◀ 아이콘 수정 -->
-                    <div class="exp-info">
-                        <strong>00 대외활동</strong>
-                        <span class="exp-tags">#2025.03.08-2025.08.09 #첫도전 #성장 #축구 #취미</span>
-                    </div>
-                    <div class="exp-actions">
-                        <button class="btn-action">확인하기</button>
-                        <button class="btn-action btn-delete">삭제하기</button>
-                    </div>
+            <div class="experience-list" id="mungteong-list-container">
                 </div>
-                <div class="exp-item">
-                    <span class="doc-icon icon-gslides">📗</span> <!-- ◀ 아이콘 수정 -->
-                    <div class="exp-info">
-                        <strong>00 대회</strong>
-                        <span class="exp-tags">#2024.03.08-2024.08.09 #첫대회 #부상 #이겨냄</span>
-                    </div>
-                    <div class="exp-actions">
-                        <button class="btn-action">확인하기</button>
-                        <button class="btn-action btn-delete">삭제하기</button>
-                    </div>
-                </div>
-
-            </div>
             
             <div class="pagination">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
+                </div>
             
         </main>
         {% include '_sidebar-right.html' %}
         <div id="sidebar-right-placeholder"></div>
 
     </div>
-    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/mungteong.js' %}"></script>
 </body>
 </html>
