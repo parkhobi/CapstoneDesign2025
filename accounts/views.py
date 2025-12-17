@@ -13,6 +13,7 @@ from .serializers import (
     PasswordChangeSerializer,
 )
 from .models import UserProfile
+
 class RegisterView(APIView):
     """
     회원가입: POST /api/auth/register/
@@ -129,3 +130,11 @@ def chat_view(request):
 
 def addinfo_view(request):
     return render(request, 'add-info.html')
+
+def experience_docs_view(request):
+    # 경험정리서류 목록 페이지 렌더링
+    return render(request, "experience_docs.html")
+
+def experience_doc_detail_view(request, doc_id):
+    # 경험정리서류 상세 페이지 렌더링 (doc_id 전달)
+    return render(request, "experience_doc_detail.html", {"doc_id": doc_id})

@@ -53,4 +53,7 @@ urlpatterns = [
     path("experience/", views.experience_view, name="experience"),
     path("chat/", views.chat_view, name="chat"),
     path("addinfo/", views.addinfo_view, name="addinfo"),
+    path("experience-docs/", views.experience_docs_view, name="experience_docs"),
+    path("experience-docs/<int:doc_id>/", views.experience_doc_detail_view, name="experience_doc_detail"),
+
 ]
