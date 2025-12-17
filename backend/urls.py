@@ -38,10 +38,12 @@ urlpatterns = [
     
     # accounts 앱의 URL들을 /api/auth/ 로 묶어서 사용
     path('api/auth/', include('accounts.urls')),
-
+    
     # DRF 기본 로그인/로그아웃 (브라우저 browsable API용, 선택)
     path('api-auth/', include('rest_framework.urls')),
+    path("api/career/", include("career.urls")),
     
+
     path('', views.index, name='index'),          # 메인 페이지
     path('login/', views.login_view, name='login'), # 로그인 페이지
     path('signup/', views.signup_view, name='signup'),
