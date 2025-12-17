@@ -1,17 +1,17 @@
-```markdown
 # 📂 HMH - AI 기반 커리어 관리 플랫폼 (Capstone Design Project)
+
+**2025 성신여자대학교 융합캡스톤디자인**
 
 취업 준비생을 위한 **올인원 커리어 관리 서비스**입니다.
 자신의 경험을 기록하고, 표준 이력서를 작성하며, AI와의 채팅을 통해 진로 상담을 받을 수 있습니다.
-
+---
 ## 🛠️ 기술 스택 (Tech Stack)
 
-* **Backend:** Python 3.9+, Django 4.2 (LTS), Django REST Framework (DRF)
-* **Frontend:** HTML5, CSS3, Vanilla JavaScript
+* **Backend:** Python 3.9+, Django 4.2 (LTS), Django REST Framework (DRF), Simple JWT (JWT 인증)
+* **Frontend:** HTML5, CSS3, Vanilla JavaScript, Django Template Engine
 * **Database:** SQLite (기본)
 * **Environment:** Windows / macOS
-
-```
+---
 
 ## 🚀 설치 및 실행 방법 (Installation & Execution)
 
@@ -19,7 +19,7 @@
 
 ### 1. 프로젝트 클론 (Clone)
 ```bash
-git clone [여기에_본인의_깃허브_주소_입력]
+git clone https://github.com/parkhobi/CapstoneDesign2025.git
 cd [프로젝트_폴더명]
 
 ```
