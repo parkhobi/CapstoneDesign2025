@@ -11,7 +11,7 @@
 * **Database:** SQLite (기본)
 * **Environment:** Windows / macOS
 
----
+```
 
 ## 🚀 설치 및 실행 방법 (Installation & Execution)
 
