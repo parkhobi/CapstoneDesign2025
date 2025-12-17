@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class CareerSession(models.Model):
     class Status(models.TextChoices):
         ACTIVE = "active", "진행중"
@@ -134,3 +133,33 @@ class CoverLetter(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# 경험정리서류 : 스냅샷 + 결과 저장
+class ExperienceDoc(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "PENDING", "대기"
+        DONE = "DONE", "완료"
+        FAILED = "FAILED", "실패"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="experience_docs")
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+
+    # ✅ 요구사항 핵심: DB에서 불러온 값들만 저장(스냅샷)
+    snapshot = models.JSONField(default=dict)
+
+    # 결과(문서 형태 JSON)
+    result = models.JSONField(null=True, blank=True)
+
+    template = models.CharField(max_length=50, default="default")
+    language = models.CharField(max_length=10, default="ko")
+
+    error_message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "experience_docs"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.username} ExperienceDoc #{self.id} ({self.status})"

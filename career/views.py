@@ -5,13 +5,14 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions, status
+from rest_framework import permissions, status, viewsets
 
 from .models import (
     CareerSession,
     CareerMessage,
     CareerPortfolio,
     Experience,
+    ExperienceDoc,
     StandardResume,
     CoverLetter,
 )
@@ -20,6 +21,8 @@ from .serializers import (
     CareerMessageListSerializer,
     RecommendInSerializer,
 )
+
+from .services import build_experience_snapshot
 
 
 def _normalize_ai_base_uri() -> str:
@@ -346,3 +349,96 @@ class CoverLetterListView(APIView):
         letters = CoverLetter.objects.filter(user=request.user).order_by("-created_at")
         data = [{"id": l.id, "title": l.title} for l in letters]
         return Response(data, status=status.HTTP_200_OK)
+
+
+# -------------------------
+# Experience Docs (DB-only)
+# -------------------------
+class ExperienceDocViewSet(viewsets.ViewSet):
+    """
+    /api/career/experience-docs/
+    - list:   GET
+    - create: POST  (✅ DB에서만 스냅샷 만들고 문서 생성)
+    /api/career/experience-docs/{pk}/
+    - retrieve: GET
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request):
+        qs = ExperienceDoc.objects.filter(user=request.user).order_by("-created_at")
+        data = [
+            {
+                "id": d.id,
+                "status": d.status,
+                "template": d.template,
+                "language": d.language,
+                "created_at": d.created_at,
+            }
+            for d in qs
+        ]
+        return Response({"experience_docs": data}, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk=None):
+        doc = get_object_or_404(ExperienceDoc, id=pk, user=request.user)
+        return Response(
+            {
+                "id": doc.id,
+                "status": doc.status,
+                "template": doc.template,
+                "language": doc.language,
+                "created_at": doc.created_at,
+                "snapshot": doc.snapshot,
+                "result": doc.result,
+                "error_message": doc.error_message,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    def create(self, request):
+        # ✅ 프론트가 보내는 내용은 옵션만(없으면 기본값)
+        template = request.data.get("template", "default")
+        language = request.data.get("language", "ko")
+
+        # (선택) 프론트가 내용을 보내면 거절 -> "DB ONLY" 강제
+        blocked_keys = {"snapshot", "result", "experiences", "portfolio", "standard_resume", "cover_letters"}
+        if blocked_keys & set(request.data.keys()):
+            return Response(
+                {"detail": "경험정리서류 내용은 DB에서만 생성됩니다. (옵션만 전송 가능)"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        snapshot = build_experience_snapshot(request.user)
+
+        # ✅ AI 없이도 프론트가 바로 렌더링 가능한 기본 result 생성
+        result = {
+            "title": "경험정리서류",
+            "generated_from": "DB_ONLY",
+            "sections": [
+                {"key": "portfolio", "content": snapshot["portfolio"]},
+                {"key": "experiences", "items": snapshot["experiences"]},
+                {"key": "standard_resume", "content": snapshot["standard_resume"]},
+                {"key": "cover_letters", "items": snapshot["cover_letters"]},
+            ],
+        }
+
+        doc = ExperienceDoc.objects.create(
+            user=request.user,
+            status=ExperienceDoc.Status.DONE,
+            snapshot=snapshot,
+            result=result,
+            template=template,
+            language=language,
+        )
+
+        return Response(
+            {
+                "id": doc.id,
+                "status": doc.status,
+                "template": doc.template,
+                "language": doc.language,
+                "created_at": doc.created_at,
+                "snapshot": doc.snapshot,
+                "result": doc.result,
+            },
+            status=status.HTTP_201_CREATED,
+        )
