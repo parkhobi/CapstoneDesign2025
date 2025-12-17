@@ -81,40 +81,72 @@ python manage.py runserver
 
 ```
 HMH_PROJECT/
-├── manage.py                 # Django 프로젝트 실행 및 관리 스크립트
-├── requirements.txt          # 프로젝트에 필요한 Python 패키지 목록
-├── db.sqlite3                # 로컬 데이터베이스 파일
+├── manage.py                     # Django 프로젝트 실행 스크립트
+├── requirements.txt              # Python 패키지 의존성 목록
+├── db.sqlite3                    # 로컬 SQLite DB (개발용)
+├── .env                          # 환경 변수 파일 (GitHub 제외)
+├── .gitignore                    # Git 제외 설정
 │
-├── backend/ (또는 config/)    # 프로젝트 전역 설정
-│   ├── settings.py           # 앱 등록, DB 설정, 정적 파일 경로 등 설정
-│   └── urls.py               # 전체 API 및 페이지 URL 라우팅
+├── backend/                      # Django 프로젝트 설정(App-level)
+│   ├── __init__.py
+│   ├── settings.py               # 전역 설정 (INSTALLED_APPS, DB, JWT 등)
+│   ├── urls.py                   # 전체 URL 라우팅 (API + 페이지)
+│   ├── asgi.py
+│   └── wsgi.py
 │
-├── accounts/                 # [APP] 회원 관리 (로그인/회원가입)
-│   ├── models.py             # User 모델 확장 (필요 시)
-│   └── views.py              # JWT 토큰 발급 및 사용자 인증 로직
+├── accounts/                     # [APP] 사용자 계정 / 인증
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py                 # 사용자 관련 모델
+│   ├── serializers.py            # 인증/회원 관련 Serializer
+│   ├── urls.py                   # /api/auth/* 라우팅
+│   ├── views.py                  # 로그인, 회원가입, 페이지 렌더링
+│   ├── tests.py
+│   └── migrations/
+│       └── __init__.py
 │
-├── career/                   # [APP] 핵심 기능 (이력서, 경험정리, 채팅)
-│   ├── models.py             # DB 모델 (Experience, StandardResume, CoverLetter 등)
-│   ├── views.py              # 데이터 조회/저장 API (DRF View)
-│   └── urls.py               # API 엔드포인트 관리
+├── career/                       # [APP] 커리어 핵심 도메인
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py                 # Experience, ExperienceDoc, Resume 등
+│   ├── serializers.py            # Career 관련 Serializer
+│   ├── services.py               # DB Snapshot 생성 로직
+│   ├── views.py                  # REST API (DRF View / ViewSet)
+│   ├── urls.py                   # /api/career/* 엔드포인트
+│   ├── tests.py
+│   └── migrations/
+│       ├── __init__.py
 │
-├── templates/                # [Frontend] HTML 화면 파일
-│   ├── index.html            # 메인 대시보드
-│   ├── resume.html           # 표준 이력서 작성/수정 페이지
-│   ├── experience.html       # 경험 정리(카드형) 페이지
-│   ├── mungteong.html        # AI 채팅(뭉텅이) 페이지
-│   ├── profile.html          # 내 정보 수정 페이지
-│   └── _sidebar-left.html    # 공통 왼쪽 사이드바 (메뉴)
+├── templates/                    # Django Template (Frontend)
+│   ├── index.html                # 메인 대시보드
+│   ├── login.html                # 로그인 페이지
+│   ├── signup.html               # 회원가입 페이지
+│   ├── signup-success.html       # 회원가입 완료 페이지
+│   ├── profile.html              # 내 정보 페이지
+│   ├── resume.html               # 표준 이력서 페이지
+│   ├── experience.html           # 경험 입력/관리 페이지
+│   ├── experience_docs.html      # 경험정리서류 목록 페이지
+│   ├── experience_doc_detail.html# 경험정리서류 상세 페이지
+│   ├── mungteong.html            # AI 채팅 페이지
+│   ├── add-info.html             # 추가 정보 입력 페이지
+│   ├── _sidebar-left.html        # 공통 왼쪽 사이드바
+│   └── _sidebar-right.html       # 공통 오른쪽 사이드바
 │
-└── static/                   # [Frontend] 정적 파일 (CSS, JS, Images)
+└── static/                       # 정적 파일 (CSS / JavaScript / Images)
     ├── css/
-    │   └── style.css         # 전체 페이지 공통 스타일 및 레이아웃
-    └── js/
-        ├── common.js         # 로그인 토큰 체크 등 공통 로직
-        ├── resume.js         # 이력서 데이터 로드/저장 (탭, 동적 폼 처리)
-        ├── experience.js     # 경험 카드 CRUD 및 모달 처리
-        ├── mungteong.js      # 채팅 기록 불러오기
-        └── sidebar.js        # 페이지별 오른쪽 사이드바 내용 변경 로직
+    │   └── style.css             # 전체 공통 스타일
+    ├── js/
+    │   ├── common.js             # 공통 유틸 (토큰 체크 등)
+    │   ├── sidebar.js             # 오른쪽 사이드바 제어
+    │   ├── experience.js          # 경험 카드 CRUD
+    │   ├── experience_doc.js      # 경험정리서류 목록/상세 처리
+    │   ├── resume.js              # 이력서 관리
+    │   ├── mungteong.js           # AI 채팅 로직
+    │   ├── login.js
+    │   ├── signup.js
+    │   └── profile.js
 
 ```
 
@@ -141,6 +173,16 @@ HMH_PROJECT/
 
 * AI와 진로 상담을 진행하고 대화 내용을 저장합니다.
 * **API:** `GET /api/chat-sessions/`
+
+### 5. 경험정리서류
+* DB에 저장된 정보만을 기반으로 스냅샷 생성
+* AI 없이도 즉시 문서 생성 가능
+* 결과는 JSON 형태로 저장 및 조회
+
+* **API:**
+* GET  /api/career/experience-docs/
+* POST /api/career/experience-docs/
+* GET  /api/career/experience-docs/{id}/
 
 ---
 
