@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경험 정리 서류 - HMH</title>
+    <script src="{% static 'js/common.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="resume-layout">
+        {% include '_sidebar-left.html' %}
+        <div id="sidebar-left-placeholder"></div>
+
+        <main class="experience-content">
+            <header class="experience-header">
+                <span class="doc-icon icon-gdoc">📘</span>
+                <div class="header-text">
+                    <h1>경험 정리 서류</h1>
+                    <span>너만의 경험 도토리 창고</span>
+                </div>
+            </header>
+
+            <div class="search-and-add">
+                <div class="search-bar" style="margin-bottom: 0; flex: 1;">
+                    <input type="text" placeholder="#키워드 검색">
+                </div>
+                <button id="btn-open-modal" class="btn-submit" style="width: auto; padding: 0 20px; height: 46px;">
+                    + 경험 추가
+                </button>
+            </div>
+            
+            <br> <div class="experience-list" id="experience-list-container">
+                </div>
+            
+            <div class="pagination">...</div>
+
+        </main>
+        {% include '_sidebar-right.html' %}
+        <div id="sidebar-right-placeholder"></div>
+    </div>
+
+    <div id="exp-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>새로운 경험 추가</h2>
+                <i class="fas fa-times close-modal"></i>
+            </div>
+            <form id="exp-form">
+                <div class="input-group">
+                    <label>경험 제목</label>
+                    <input type="text" id="exp-title" placeholder="예: 00 대외활동" required>
+                </div>
+                <div class="input-row">
+                    <div class="input-group half-width">
+                        <label>시작일</label>
+                        <input type="date" id="exp-start" required>
+                    </div>
+                    <div class="input-group half-width">
+                        <label>종료일</label>
+                        <input type="date" id="exp-end" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>태그 (키워드)</label>
+                    <input type="text" id="exp-tags" placeholder="예: #도전 #성장 (띄어쓰기로 구분)">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-save close-modal">취소</button>
+                    <button type="submit" class="btn-submit">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // 삭제 버튼 누르면 실행될 함수
+        async function deleteExperience(id) {
+            if (!confirm("정말로 삭제하시겠습니까? 복구할 수 없습니다.")) {
+                return;
+            }
+
+            const token = localStorage.getItem('accessToken');
+            
+            try {
+                // 아까 만든 삭제 주소로 요청 보냄
+                const response = await fetch(`/api/experience/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert("삭제되었습니다.");
+                    window.location.reload(); // 화면 새로고침해서 목록 갱신
+                } else {
+                    alert("삭제 실패! (권한이 없거나 이미 삭제됨)");
+                }
+            } catch (error) {
+                console.error("삭제 오류:", error);
+                alert("서버 오류가 발생했습니다.");
+            }
+        }
+    </script>
+    <script src="{% static 'js/experience.js' %}"></script>
+</body>
+</html>

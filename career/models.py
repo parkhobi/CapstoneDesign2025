@@ -85,3 +85,39 @@ class CareerPortfolio(models.Model):
     def __str__(self):
         return f"{self.user.username} portfolio"
 
+class Experience(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="experiences",
+    )
+    title = models.CharField(max_length=255)  # 경험 제목
+    start_date = models.DateField(null=True, blank=True) # 시작일
+    end_date = models.DateField(null=True, blank=True)   # 종료일
+    tags = models.CharField(max_length=255, blank=True)  # 태그 (#도전 #성장)
+    
+    created_at = models.DateTimeField(auto_now_add=True) # 생성 시간
+
+    class Meta:
+        ordering = ["-created_at"] # 최신순 정렬
+
+    def __str__(self):
+        return f"{self.user.username} - {self.title}"
+    
+class StandardResume(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='standard_resume')
+    content = models.JSONField(default=dict) # 이력서 내용 전체를 저장
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username}의 표준이력서"
+    
+class CoverLetter(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255) # 예: 삼성전자 자소서, 00기업 지원서
+    content = models.TextField(blank=True)   # 자소서 내용
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

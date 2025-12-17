@@ -1,0 +1,35 @@
+{% load static %}
+<aside class="sidebar">
+    <h1 class="sidebar-logo">
+        <img src="{% static 'images/HMH 로고.webp' %}" alt="HMH 로고" class="logo">
+    </h1>
+    
+    <nav class="sidebar-nav">
+        <a href="/" class="nav-button">홈</a>
+    </nav>
+
+    <div class="sidebar-section">
+        <h3>내 서류함</h3>
+        <a href="/resume/" class="module-card">
+            <span>📄</span> 표준 이력서
+        </a>
+        <a href="/experience/" class="module-card">
+            <span>📘</span> 경험 정리 서류
+        </a>
+        <a href="/mungteong/" class="module-card">
+            <span>📗</span> 뭉텅이
+        </a>
+    </div>
+
+    <div class="sidebar-section">
+        <h3>계정 관리</h3>
+        <a href="/profile/" class="module-card">
+            <span>👤</span> 내 정보 수정
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <button id="logout-button" class="nav-button logout">로그아웃</button>
+    </div>
+
+</aside>

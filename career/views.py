@@ -1,16 +1,43 @@
 # career/views.py
 import httpx
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
-from django.shortcuts import get_object_or_404
 
-from .models import CareerSession, CareerMessage, CareerPortfolio
-from .serializers import CareerMessageCreateSerializer, CareerMessageListSerializer
-from .serializers import RecommendInSerializer
+from .models import (
+    CareerSession,
+    CareerMessage,
+    CareerPortfolio,
+    Experience,
+    StandardResume,
+    CoverLetter,
+)
+from .serializers import (
+    CareerMessageCreateSerializer,
+    CareerMessageListSerializer,
+    RecommendInSerializer,
+)
 
+
+def _normalize_ai_base_uri() -> str:
+    """
+    settings.AI_BASE_URI 를 안전한 base url 형태로 정규화
+    - 공백 제거
+    - 끝 슬래시 제거
+    - scheme(http:// or https://) 없으면 http:// 붙임
+    """
+    ai_base = (getattr(settings, "AI_BASE_URI", "") or "").strip().rstrip("/")
+    if ai_base and not ai_base.startswith(("http://", "https://")):
+        ai_base = "http://" + ai_base
+    return ai_base
+
+
+# -------------------------
+# Career Session (list/create)
+# -------------------------
 class CareerSessionCreateView(APIView):
     """
     GET  /api/career/sessions/   -> 내 세션 리스트 조회
@@ -20,27 +47,22 @@ class CareerSessionCreateView(APIView):
 
     def get(self, request):
         user = request.user
-        sessions = (
-            CareerSession.objects
-            .filter(user=user)
-            .order_by("-created_at")
-        )
+        sessions = CareerSession.objects.filter(user=user).order_by("-created_at")
 
-        sessions_data = []
-        for s in sessions:
-            sessions_data.append({
+        sessions_data = [
+            {
                 "session_id": s.id,
                 "title": s.title,
                 "status": s.status,
                 "ready_for_recommend": s.ready_for_recommend,
                 "created_at": s.created_at,
-            })
-
+            }
+            for s in sessions
+        ]
         return Response({"sessions": sessions_data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         user = request.user
-
         session = CareerSession.objects.create(user=user)
 
         data = {
@@ -53,56 +75,44 @@ class CareerSessionCreateView(APIView):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
+# -------------------------
+# Career Messages (list/create) + AI chat
+# -------------------------
 class CareerSessionMessageView(APIView):
     """
-    POST /api/career/sessions/{session_id}/messages/
-    - 유저 메시지 저장
-    - (지금은) AI 서버 없이 더미 assistant 응답 + 포트폴리오 업데이트
+    GET  /api/career/sessions/{session_id}/messages/  -> 메시지 조회
+    POST /api/career/sessions/{session_id}/messages/ -> 유저 메시지 저장 + AI 응답 저장 + 포트폴리오 갱신
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, session_id):
-        print("✅ GET HIT:", session_id)
         user = request.user
-
-        # 1) 세션 소유자 확인
         session = get_object_or_404(CareerSession, id=session_id, user=user)
 
-        # 2) 세션에 속한 메시지 시간순 조회
         qs = CareerMessage.objects.filter(session=session).order_by("created_at")
-
-        # 3) 직렬화
         data = CareerMessageListSerializer(qs, many=True).data
-
-        # 4) 응답 (네가 준 예시 형태)
         return Response({"messages": data}, status=status.HTTP_200_OK)
-    
-
 
     def post(self, request, session_id):
         user = request.user
-
-        # 1) 세션 소유자 확인 (내 세션만 접근 가능)
         session = get_object_or_404(CareerSession, id=session_id, user=user)
 
-        # 2) 요청 Body 검증
+        # body 검증
         serializer = CareerMessageCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         content = serializer.validated_data["content"]
 
-        # 3) DB에 user 메시지 저장
-        CareerMessage.objects.create(
-            session=session,
-            sender="user",
-            content=content,
-        )
+        # user 메시지 저장
+        CareerMessage.objects.create(session=session, sender="user", content=content)
 
-        # 4) AI 서버 호출 준비: state(포트폴리오) + history 구성
-        portfolio_obj, _ = CareerPortfolio.objects.get_or_create(user=user, defaults={"data": {}})
+        # state + history 구성
+        portfolio_obj, _ = CareerPortfolio.objects.get_or_create(
+            user=user, defaults={"data": {}}
+        )
         state = portfolio_obj.data or {}
 
         history_qs = CareerMessage.objects.filter(session=session).order_by("created_at")
-        history = [{"role": m.sender, "content": m.content} for m in history_qs]  # user/assistant
+        history = [{"role": m.sender, "content": m.content} for m in history_qs]
 
         payload = {
             "user_id": str(user.id),
@@ -110,9 +120,16 @@ class CareerSessionMessageView(APIView):
             "user_message": content,
             "state": state,
             "history": history,
-            }
+        }
 
-        ai_base = getattr(settings, "AI_BASE_URI", "").rstrip("/")
+        ai_base = _normalize_ai_base_uri()
+        if not ai_base:
+            return Response(
+                {"detail": "AI_BASE_URI가 설정되어 있지 않습니다."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        # AI 호출
         try:
             with httpx.Client(timeout=60.0) as client:
                 r = client.post(f"{ai_base}/api/v1/career/chat", json=payload)
@@ -121,70 +138,70 @@ class CareerSessionMessageView(APIView):
         except httpx.TimeoutException:
             return Response({"detail": "AI 서버 응답이 지연되고 있어요."}, status=504)
         except httpx.HTTPStatusError as e:
-            return Response({"detail": "AI 서버 호출에 실패했어요.", "ai_status": e.response.status_code}, status=502)
+            return Response(
+                {"detail": "AI 서버 호출에 실패했어요.", "ai_status": e.response.status_code},
+                status=502,
+            )
+        except httpx.RequestError:
+            return Response({"detail": "AI 서버에 연결할 수 없어요."}, status=502)
 
         assistant_reply = ai_data.get("assistant_reply", "")
         portfolio_data = ai_data.get("portfolio", {}) or {}
         control = ai_data.get("control", {}) or {}
 
-        # 5) DB에 assistant 메시지 저장
+        # assistant 메시지 저장
         CareerMessage.objects.create(
-            session=session,
-            sender="assistant",
-            content=assistant_reply,
+            session=session, sender="assistant", content=assistant_reply
         )
 
-        # 6) 포트폴리오 upsert (있으면 수정, 없으면 생성)
+        # 포트폴리오 upsert
         portfolio_obj, _ = CareerPortfolio.objects.get_or_create(
-            user=user,
-            defaults={"data": {}},
+            user=user, defaults={"data": {}}
         )
         portfolio_obj.data = portfolio_data or {}
         portfolio_obj.save(update_fields=["data", "updated_at"])
 
-        # 7) ready_for_recommend 플래그 갱신
+        # ready_for_recommend 갱신
         ready = bool(control.get("ready_for_recommend", False))
         if ready != session.ready_for_recommend:
             session.ready_for_recommend = ready
             session.save(update_fields=["ready_for_recommend"])
 
-        # 8) 응답
         return Response(
-            {
-                "assistant_reply": assistant_reply,
-                "portfolio": portfolio_data,
-                "control": control,
-            },
+            {"assistant_reply": assistant_reply, "portfolio": portfolio_data, "control": control},
             status=status.HTTP_200_OK,
         )
-    
+
+
+# -------------------------
+# Career Recommend
+# -------------------------
 class CareerRecommendView(APIView):
+    """
+    POST /api/career/sessions/{session_id}/recommend/
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, session_id):
         user = request.user
         session = get_object_or_404(CareerSession, id=session_id, user=user)
 
-        # 1) ready_for_recommend 체크
         if not session.ready_for_recommend:
             return Response(
                 {"detail": "아직 추천을 하기에는 정보가 부족해요. 조금 더 전공/관심 직무/경험에 대해 이야기해 주세요."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # 2) body 검증
         serializer = RecommendInSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         top_k = serializer.validated_data.get("top_k", 5)
 
-        # 3) AI recommend 호출 (AI 명세: GET /api/v1/career/recommend?user_id=...&top_k=...)
-        ai_base = getattr(settings, "AI_BASE_URI", "")
-
-        ai_base = (ai_base or "").strip().rstrip("/")
-        if ai_base and not ai_base.startswith(("http://", "https://")):
-            ai_base = "http://" + ai_base
-
-        print("AI_BASE_URI FIXED =", repr(ai_base))
+        ai_base = _normalize_ai_base_uri()
+        if not ai_base:
+            return Response(
+                {"detail": "AI_BASE_URI가 설정되어 있지 않습니다."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         params = {"user_id": str(user.id), "top_k": top_k}
 
@@ -196,6 +213,95 @@ class CareerRecommendView(APIView):
         except httpx.TimeoutException:
             return Response({"detail": "AI 서버 응답이 지연되고 있어요."}, status=504)
         except httpx.HTTPStatusError as e:
-            return Response({"detail": "AI 서버 호출에 실패했어요.", "ai_status": e.response.status_code}, status=502)
+            return Response(
+                {"detail": "AI 서버 호출에 실패했어요.", "ai_status": e.response.status_code},
+                status=502,
+            )
+        except httpx.RequestError:
+            return Response({"detail": "AI 서버에 연결할 수 없어요."}, status=502)
 
+        return Response(data, status=status.HTTP_200_OK)
+
+
+# -------------------------
+# Experience (list/create/delete)
+# -------------------------
+class ExperienceListCreateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        experiences = Experience.objects.filter(user=request.user)
+
+        data = [
+            {
+                "id": exp.id,
+                "title": exp.title,
+                "start_date": exp.start_date,
+                "end_date": exp.end_date,
+                "tags": exp.tags,
+            }
+            for exp in experiences
+        ]
+        return Response(data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        title = request.data.get("title")
+        start_date = request.data.get("start_date")
+        end_date = request.data.get("end_date")
+        tags = request.data.get("tags")
+
+        if not title:
+            return Response({"error": "제목은 필수입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        Experience.objects.create(
+            user=request.user,
+            title=title,
+            start_date=start_date,
+            end_date=end_date,
+            tags=tags,
+        )
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class ExperienceDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            exp = Experience.objects.get(pk=pk, user=request.user)
+            exp.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Experience.DoesNotExist:
+            return Response(
+                {"error": "해당 경험을 찾을 수 없거나 권한이 없습니다."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+
+# -------------------------
+# Standard Resume (get/save)
+# -------------------------
+class StandardResumeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        resume, _ = StandardResume.objects.get_or_create(user=request.user)
+        return Response(resume.content, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        resume, _ = StandardResume.objects.get_or_create(user=request.user)
+        resume.content = request.data
+        resume.save()
+        return Response({"message": "저장되었습니다."}, status=status.HTTP_200_OK)
+
+
+# -------------------------
+# CoverLetter list
+# -------------------------
+class CoverLetterListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        letters = CoverLetter.objects.filter(user=request.user).order_by("-created_at")
+        data = [{"id": l.id, "title": l.title} for l in letters]
         return Response(data, status=status.HTTP_200_OK)

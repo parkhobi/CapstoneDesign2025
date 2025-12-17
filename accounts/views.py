@@ -71,7 +71,6 @@ class MeView(APIView):
             return Response(MeDetailSerializer(user).data, status=status.HTTP_200_OK)
         return Response(s.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class PasswordChangeView(APIView):
     """
     비밀번호 변경: POST /api/auth/change-password/
@@ -98,3 +97,35 @@ class PasswordChangeView(APIView):
 
 # 프로필이 없을 때도 gender에 임시값(MALE) 을 넣어서 생성하니까 → DB 에러 없이 안전하게 동작
 # 이후에 프론트에서 PATCH 요청으로 gender를 "F"로 바꾸면 정상적으로 업데이트됨.
+
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')
+
+def login_view(request):
+    return render(request, 'login.html')
+
+def signup_view(request):
+    return render(request, 'signup.html')
+
+def signupsuccess_view(request):
+    return render(request, 'signup-success.html')
+
+def resume_view(request):
+    return render(request, 'resume.html')
+
+def profile_view(request):
+    return render(request, 'profile.html')
+
+def mungteong_view(request):
+    return render(request, 'mungteong.html')
+
+def experience_view(request):
+    return render(request, 'experience.html')
+
+def chat_view(request):
+    return render(request, 'chat.html')
+
+def addinfo_view(request):
+    return render(request, 'add-info.html')

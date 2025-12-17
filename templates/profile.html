@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 정보 수정 - HMH</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="{% static 'js/common.js' %}"></script>
+</head>
+<body>
+    <div class="main-layout">
+        
+        {% include '_sidebar-left.html' %}
+        <div id="sidebar-left-placeholder"></div>
+
+        <main class="main-content">
+            <div class="signup-container" style="margin: 20px auto; max-width: 600px;">
+                
+                <h1>내 정보 수정</h1>
+                <p class="signup-description">
+                    등록된 정보를 수정할 수 있습니다.
+                </p>
+                
+                <form id="profile-form">
+                    
+                    <h2>기본 정보</h2>
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <label for="name-ko">이름 (한글)</label>
+                            <input type="text" id="name-ko" placeholder="홍길동" required>
+                        </div>
+                        <div class="input-group half-width">
+                            <label for="name-en">영문 이름</label>
+                            <input type="text" id="name-en" placeholder="Gildong Hong" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <label for="gender">성별</label>
+                            <select id="gender" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+                                <option value="">선택</option>
+                                <option value="M">남성</option>
+                                <option value="F">여성</option>
+                            </select>
+                        </div>
+                        <div class="input-group half-width">
+                            <label for="nationality">국적</label>
+                            <input type="text" id="nationality" placeholder="대한민국" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="address">주소</label>
+                        <input type="text" id="address" placeholder="시/구/동 번지수 등 상세주소 입력" required>
+                    </div>
+
+                    <h2>연락처</h2>
+                    <div class="input-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" placeholder="example@email.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">전화번호</label>
+                        <input type="tel" id="phone" placeholder="010-1234-5678" required>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="cancel-button" onclick="window.history.back()">취소</button>
+                        <button type="submit" class="signup-button">수정 완료</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/profile.js' %}"></script>
+</body>
+</html>
