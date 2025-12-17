@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMH - 메인</title>
+
     <script src="{% static 'js/common.js' %}"></script>
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -15,9 +17,8 @@
         <div id="sidebar-left-placeholder"></div>
 
         <main class="main-content">
-            <header class="main-top-bar">
-                </header>
-            
+            <header class="main-top-bar"></header>
+
             <div class="content-wrapper">
                 <h1><span id="user-greeting"></span><br>무엇을 도와드릴까요?</h1>
 
@@ -26,7 +27,7 @@
                     <div class="prompt-icons">
                         <i class="fas fa-microphone"></i>
                         <i class="fas fa-image"></i>
-                        <i id="home-submit" class="fas fa-search"></i> 
+                        <i id="home-submit" class="fas fa-search"></i>
                     </div>
                 </div>
 
@@ -58,39 +59,37 @@
                 </section>
             </div>
         </main>
-
     </div>
-    <script src="{% static 'js/common.js' %}"></script>
+
+
     <script>
-        // index.html에 추가할 스크립트
         document.addEventListener('DOMContentLoaded', () => {
             const homePrompt = document.getElementById('home-prompt');
             const homeSubmit = document.getElementById('home-submit');
 
-            // 채팅 시작 함수
             function startChat() {
                 const promptText = homePrompt.value;
-                if (promptText.trim() === "") return; // 내용이 없으면 중단
+                if (promptText.trim() === "") return;
 
-                // [핵심] 사용자의 첫 질문을 localStorage에 저장
+                // "새 대화" 시작: 이전 세션 끊기
+                localStorage.removeItem('careerSessionId');
+
+                // 첫 질문 저장
                 localStorage.setItem('initialPrompt', promptText);
-                
-                // 새로운 채팅 페이지로 이동
+
+                // 채팅 페이지로 이동
                 window.location.href = '/chat/';
             }
 
-            // 1. 검색 아이콘 클릭 시
             homeSubmit.addEventListener('click', startChat);
 
-            // 2. Enter 키 입력 시 (Shift+Enter는 줄바꿈)
             homePrompt.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault(); // 기본 Enter 동작(줄바꿈) 방지
+                    e.preventDefault();
                     startChat();
                 }
             });
         });
-
     </script>
 </body>
 </html>
