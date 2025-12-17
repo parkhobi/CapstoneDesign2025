@@ -23,26 +23,32 @@ from .serializers import (
 
 
 def _normalize_ai_base_uri() -> str:
-    """
-    settings.AI_BASE_URI 를 안전한 base url 형태로 정규화
-    - 공백 제거
-    - 끝 슬래시 제거
-    - scheme(http:// or https://) 없으면 http:// 붙임
-    """
     ai_base = (getattr(settings, "AI_BASE_URI", "") or "").strip().rstrip("/")
     if ai_base and not ai_base.startswith(("http://", "https://")):
         ai_base = "http://" + ai_base
     return ai_base
 
 
+def _get_history(session: CareerSession, exclude_message_id: int | None = None, limit: int = 30):
+    """
+    - history에는 '이번에 막 저장한 user_message'가 들어가면 중복 전송됨
+    - exclude_message_id로 제외
+    - limit로 최근 N개만 (토큰 폭발 방지)
+    """
+    qs = CareerMessage.objects.filter(session=session).order_by("-created_at")
+    if exclude_message_id is not None:
+        qs = qs.exclude(id=exclude_message_id)
+
+    # 최근 limit개만 가져온 뒤, 시간 순으로 다시 정렬
+    recent = list(qs[:limit])
+    recent.reverse()
+    return [{"role": m.sender, "content": m.content} for m in recent]
+
+
 # -------------------------
 # Career Session (list/create)
 # -------------------------
 class CareerSessionCreateView(APIView):
-    """
-    GET  /api/career/sessions/   -> 내 세션 리스트 조회
-    POST /api/career/sessions/   -> 새 세션 생성
-    """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -76,13 +82,23 @@ class CareerSessionCreateView(APIView):
 
 
 # -------------------------
+# Career Portfolio (me)
+# -------------------------
+class CareerPortfolioMeView(APIView):
+    """
+    GET /api/career/portfolio/me/
+    - Django DB에 저장된 career_portfolios.data 그대로 반환
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        obj, _ = CareerPortfolio.objects.get_or_create(user=request.user, defaults={"data": {}})
+        return Response(obj.data or {}, status=status.HTTP_200_OK)
+
+# -------------------------
 # Career Messages (list/create) + AI chat
 # -------------------------
 class CareerSessionMessageView(APIView):
-    """
-    GET  /api/career/sessions/{session_id}/messages/  -> 메시지 조회
-    POST /api/career/sessions/{session_id}/messages/ -> 유저 메시지 저장 + AI 응답 저장 + 포트폴리오 갱신
-    """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, session_id):
@@ -97,22 +113,25 @@ class CareerSessionMessageView(APIView):
         user = request.user
         session = get_object_or_404(CareerSession, id=session_id, user=user)
 
-        # body 검증
         serializer = CareerMessageCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         content = serializer.validated_data["content"]
 
-        # user 메시지 저장
-        CareerMessage.objects.create(session=session, sender="user", content=content)
+        # ✅ user 메시지 저장 (id 확보해서 history에서 제외)
+        user_msg = CareerMessage.objects.create(session=session, sender="user", content=content)
 
-        # state + history 구성
-        portfolio_obj, _ = CareerPortfolio.objects.get_or_create(
-            user=user, defaults={"data": {}}
-        )
+        # (선택) 세션 제목이 비어 있으면 첫 메시지로 자동 세팅
+        if not session.title:
+            session.title = content[:30]
+            session.save(update_fields=["title", "updated_at"])
+
+        # ✅ state는 "유저 포트폴리오"에서 가져옴 (DB = Django)
+        portfolio_obj, _ = CareerPortfolio.objects.get_or_create(user=user, defaults={"data": {}})
         state = portfolio_obj.data or {}
 
-        history_qs = CareerMessage.objects.filter(session=session).order_by("created_at")
-        history = [{"role": m.sender, "content": m.content} for m in history_qs]
+        # ✅ history에는 방금 user_msg 제외 (중복 전송 방지)
+        history_limit = int(getattr(settings, "CAREER_HISTORY_LIMIT", 30))
+        history = _get_history(session, exclude_message_id=user_msg.id, limit=history_limit)
 
         payload = {
             "user_id": str(user.id),
@@ -144,28 +163,25 @@ class CareerSessionMessageView(APIView):
             )
         except httpx.RequestError:
             return Response({"detail": "AI 서버에 연결할 수 없어요."}, status=502)
+        except ValueError:
+            return Response({"detail": "AI 서버 응답이 JSON 형식이 아니에요."}, status=502)
 
-        assistant_reply = ai_data.get("assistant_reply", "")
+        assistant_reply = ai_data.get("assistant_reply", "") or ""
         portfolio_data = ai_data.get("portfolio", {}) or {}
         control = ai_data.get("control", {}) or {}
 
         # assistant 메시지 저장
-        CareerMessage.objects.create(
-            session=session, sender="assistant", content=assistant_reply
-        )
+        CareerMessage.objects.create(session=session, sender="assistant", content=assistant_reply)
 
-        # 포트폴리오 upsert
-        portfolio_obj, _ = CareerPortfolio.objects.get_or_create(
-            user=user, defaults={"data": {}}
-        )
-        portfolio_obj.data = portfolio_data or {}
+        # ✅ 포트폴리오 upsert (DB 저장)
+        portfolio_obj.data = portfolio_data
         portfolio_obj.save(update_fields=["data", "updated_at"])
 
-        # ready_for_recommend 갱신
+        # ✅ ready_for_recommend는 세션에 저장 (요구사항 그대로)
         ready = bool(control.get("ready_for_recommend", False))
         if ready != session.ready_for_recommend:
             session.ready_for_recommend = ready
-            session.save(update_fields=["ready_for_recommend"])
+            session.save(update_fields=["ready_for_recommend", "updated_at"])
 
         return Response(
             {"assistant_reply": assistant_reply, "portfolio": portfolio_data, "control": control},
@@ -179,6 +195,9 @@ class CareerSessionMessageView(APIView):
 class CareerRecommendView(APIView):
     """
     POST /api/career/sessions/{session_id}/recommend/
+    - 세션 ready_for_recommend가 false면 400
+    - ✅ Django 포트폴리오(state)를 기반으로 stateless 추천을 "우선 시도"
+      (AI가 구버전이면 자동 fallback)
     """
     permission_classes = [permissions.IsAuthenticated]
 
@@ -203,13 +222,34 @@ class CareerRecommendView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        params = {"user_id": str(user.id), "top_k": top_k}
+        # ✅ DB(Django)에 있는 유저 포트폴리오 state를 가져옴
+        portfolio_obj, _ = CareerPortfolio.objects.get_or_create(user=user, defaults={"data": {}})
+        state = portfolio_obj.data or {}
 
         try:
             with httpx.Client(timeout=60.0) as client:
-                r = client.get(f"{ai_base}/api/v1/career/recommend", params=params)
+                # 1) ✅ stateless 추천(권장): POST + state 포함을 "우선 시도"
+                #    (AI 서버가 아직 이 필드를 받지 못하면 422가 날 수 있어 fallback)
+                payload = {"user_id": str(user.id), "top_k": top_k, "state": state}
+                r = client.post(f"{ai_base}/api/v1/career/recommend", json=payload)
+
+                if r.status_code == 422:
+                    # 2) 구버전(POST는 받지만 state extra를 금지)일 수 있음 → state 없이 재시도
+                    r = client.post(
+                        f"{ai_base}/api/v1/career/recommend",
+                        json={"user_id": str(user.id), "top_k": top_k},
+                    )
+
+                if r.status_code in (404, 405):
+                    # 3) 아주 구버전: GET만 지원 → GET fallback
+                    r = client.get(
+                        f"{ai_base}/api/v1/career/recommend",
+                        params={"user_id": str(user.id), "top_k": top_k},
+                    )
+
                 r.raise_for_status()
                 data = r.json()
+
         except httpx.TimeoutException:
             return Response({"detail": "AI 서버 응답이 지연되고 있어요."}, status=504)
         except httpx.HTTPStatusError as e:
@@ -219,6 +259,8 @@ class CareerRecommendView(APIView):
             )
         except httpx.RequestError:
             return Response({"detail": "AI 서버에 연결할 수 없어요."}, status=502)
+        except ValueError:
+            return Response({"detail": "AI 서버 응답이 JSON 형식이 아니에요."}, status=502)
 
         return Response(data, status=status.HTTP_200_OK)
 
@@ -231,7 +273,6 @@ class ExperienceListCreateView(APIView):
 
     def get(self, request):
         experiences = Experience.objects.filter(user=request.user)
-
         data = [
             {
                 "id": exp.id,

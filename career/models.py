@@ -1,3 +1,4 @@
+# career/models.py
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -23,16 +24,17 @@ class CareerSession(models.Model):
         choices=Status.choices,
         default=Status.ACTIVE,
     )
+
     ready_for_recommend = models.BooleanField(
         default=False,
-        help_text="AI 추천(포트폴리오 생성)까지 완료되었는지 여부",
+        help_text="(권장: deprecated) 추천 준비 여부는 CareerPortfolio에 두는 게 일관됨",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "career_sessions"   # 네가 정한 테이블 이름 그대로 사용
+        db_table = "career_sessions"
         ordering = ["-created_at"]
 
     def __str__(self):
@@ -49,10 +51,7 @@ class CareerMessage(models.Model):
         on_delete=models.CASCADE,
         related_name="messages",
     )
-    sender = models.CharField(
-        max_length=10,
-        choices=Sender.choices,
-    )
+    sender = models.CharField(max_length=10, choices=Sender.choices)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -65,18 +64,34 @@ class CareerMessage(models.Model):
 
 
 class CareerPortfolio(models.Model):
-    # user_id가 PK + FK 가 되도록 OneToOneField + primary_key=True
+    # 유저당 1개
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True,
         related_name="career_portfolio",
     )
-    # JSONB 대신 Django의 JSONField 사용 (SQLite에서도 잘 동작)
     data = models.JSONField(
         default=dict,
-        help_text="AI 서버에서 생성한 포트폴리오 전체 JSON",
+        help_text="AI 서버에서 생성/업데이트한 포트폴리오 전체 JSON",
     )
+
+    ready_for_recommend = models.BooleanField(
+        default=False,
+        help_text="추천 가능 상태인지 (AI control.ready_for_recommend를 저장)",
+    )
+    stage = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="AI control.stage (ex: collecting_info / ready_for_recommend)",
+    )
+    recommend_hint = models.TextField(
+        blank=True,
+        null=True,
+        help_text="AI control.recommend_hint (정보 부족 시 안내)",
+    )
+
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -85,37 +100,35 @@ class CareerPortfolio(models.Model):
     def __str__(self):
         return f"{self.user.username} portfolio"
 
+
 class Experience(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="experiences",
-    )
-    title = models.CharField(max_length=255)  # 경험 제목
-    start_date = models.DateField(null=True, blank=True) # 시작일
-    end_date = models.DateField(null=True, blank=True)   # 종료일
-    tags = models.CharField(max_length=255, blank=True)  # 태그 (#도전 #성장)
-    
-    created_at = models.DateTimeField(auto_now_add=True) # 생성 시간
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="experiences")
+    title = models.CharField(max_length=255)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    tags = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-created_at"] # 최신순 정렬
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.user.username} - {self.title}"
-    
+
+
 class StandardResume(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='standard_resume')
-    content = models.JSONField(default=dict) # 이력서 내용 전체를 저장
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="standard_resume")
+    content = models.JSONField(default=dict)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user.username}의 표준이력서"
-    
+
+
 class CoverLetter(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255) # 예: 삼성전자 자소서, 00기업 지원서
-    content = models.TextField(blank=True)   # 자소서 내용
+    title = models.CharField(max_length=255)
+    content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
